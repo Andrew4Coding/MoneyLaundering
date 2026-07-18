@@ -35,19 +35,6 @@ struct HomeView: View {
                 .padding()
             }
             .navigationTitle("Home")
-            .toolbar {
-                ToolbarSpacer(.flexible, placement: .bottomBar)
-
-                ToolbarItem(placement: .bottomBar) {
-                    Button {
-                        isPresentingAdd = true
-                    } label: {
-                        Image(systemName: "plus")
-                    }
-                    .buttonStyle(.glassProminent)
-                    .accessibilityLabel("Add Transaction")
-                }
-            }
         }
     }
 }

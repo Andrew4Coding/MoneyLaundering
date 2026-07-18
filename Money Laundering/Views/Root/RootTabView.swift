@@ -11,6 +11,8 @@ import SwiftData
 /// the tab bar. Stats lives inside Home rather than as a separate tab.
 struct RootTabView: View {
     @State private var isPresentingAdd = false
+    @State private var selection = 0
+    @State private var previousSelection = 0
 
     var body: some View {
         ZStack {
@@ -24,19 +26,31 @@ struct RootTabView: View {
             )
             .ignoresSafeArea()
 
-            TabView {
-                Tab("Home", systemImage: "house.fill") {
+            TabView(selection: $selection) {
+                Tab("Home", systemImage: "house.fill", value: 0) {
                     HomeView(isPresentingAdd: $isPresentingAdd)
                 }
 
-                Tab("Transactions", systemImage: "list.bullet") {
+                Tab("Transactions", systemImage: "list.bullet", value: 1) {
                     TransactionsListView(isPresentingAdd: $isPresentingAdd)
                 }
 
-                Tab("Account", systemImage: "person.crop.circle") {
+                Tab("Account", systemImage: "person.crop.circle", value: 2) {
                     AccountView()
                 }
+                
+                Tab("Plus", systemImage: "plus", value: 3, role: .search) {
+                    Color.clear
+                }
             }
+        }
+        .onChange(of: selection) { _, newValue in
+            guard newValue == 3 else {
+                previousSelection = newValue
+                return
+            }
+            isPresentingAdd = true
+            selection = previousSelection
         }
         .sheet(isPresented: $isPresentingAdd) {
             AddTransactionView()
