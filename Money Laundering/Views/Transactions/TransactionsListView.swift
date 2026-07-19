@@ -46,19 +46,6 @@ struct TransactionsListView: View {
             }
             .navigationTitle("Transactions")
             .searchable(text: $viewModel.searchText, prompt: "Search title, description, or category")
-            .toolbar {
-                ToolbarSpacer(.flexible, placement: .bottomBar)
-
-                ToolbarItem(placement: .bottomBar) {
-                    Button {
-                        isPresentingAdd = true
-                    } label: {
-                        Image(systemName: "plus")
-                    }
-                    .buttonStyle(.glassProminent)
-                    .accessibilityLabel("Add Transaction")
-                }
-            }
         }
     }
 

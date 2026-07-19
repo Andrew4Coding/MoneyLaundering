@@ -7,15 +7,16 @@ import Foundation
 import SwiftData
 
 enum CategorySeeder {
-    /// Seeds the default category set once. Idempotent — safe to call on every launch.
     static func seedIfNeeded(context: ModelContext) {
-        var descriptor = FetchDescriptor<TransactionCategory>(predicate: #Predicate { $0.isDefault == true })
-        descriptor.fetchLimit = 1
+        mergeDuplicates(context: context)
 
-        let existingCount = (try? context.fetchCount(descriptor)) ?? 0
-        guard existingCount == 0 else { return }
+        let existingNames = Set(
+            ((try? context.fetch(FetchDescriptor<TransactionCategory>())) ?? [])
+                .map { $0.name.lowercased() }
+        )
 
-        for definition in defaultDefinitions {
+        var didInsert = false
+        for definition in defaultDefinitions where !existingNames.contains(definition.name.lowercased()) {
             let category = TransactionCategory(
                 name: definition.name,
                 iconType: .system,
@@ -26,9 +27,36 @@ enum CategorySeeder {
                 isDefault: true
             )
             context.insert(category)
+            didInsert = true
         }
 
-        try? context.save()
+        if didInsert {
+            try? context.save()
+        }
+    }
+
+    private static func mergeDuplicates(context: ModelContext) {
+        guard let allCategories = try? context.fetch(FetchDescriptor<TransactionCategory>()) else { return }
+
+        let groups = Dictionary(grouping: allCategories) { $0.name.lowercased() }
+
+        var didDelete = false
+        for group in groups.values where group.count > 1 {
+            let sorted = group.sorted { $0.createdAt < $1.createdAt }
+            guard let keeper = sorted.first else { continue }
+
+            for duplicate in sorted.dropFirst() {
+                for transaction in duplicate.transactions ?? [] {
+                    transaction.category = keeper
+                }
+                context.delete(duplicate)
+                didDelete = true
+            }
+        }
+
+        if didDelete {
+            try? context.save()
+        }
     }
 
     private struct Definition {

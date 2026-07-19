@@ -36,12 +36,8 @@ struct CustomCategoryEditorView: View {
                 }
 
                 Section("Applies to") {
-                    Picker("Applies to", selection: $viewModel.newCategoryScope) {
-                        ForEach(CategoryScope.allCases) { scope in
-                            Text(scope.displayName).tag(scope)
-                        }
-                    }
-                    .pickerStyle(.segmented)
+                    checkboxRow(title: "Expense", isOn: expenseEnabled) { setExpense($0) }
+                    checkboxRow(title: "Income", isOn: incomeEnabled) { setIncome($0) }
                 }
             }
             .navigationTitle("New Category")
@@ -59,5 +55,48 @@ struct CustomCategoryEditorView: View {
                 }
             }
         }
+    }
+
+    private var expenseEnabled: Bool {
+        viewModel.newCategoryScope == .expense || viewModel.newCategoryScope == .both
+    }
+
+    private var incomeEnabled: Bool {
+        viewModel.newCategoryScope == .income || viewModel.newCategoryScope == .both
+    }
+
+    private func setExpense(_ isOn: Bool) {
+        updateScope(expense: isOn, income: incomeEnabled)
+    }
+
+    private func setIncome(_ isOn: Bool) {
+        updateScope(expense: expenseEnabled, income: isOn)
+    }
+
+    /// Keeps at least one scope checked — unchecking the last one is a no-op rather than
+    /// leaving the category applicable to nothing.
+    private func updateScope(expense: Bool, income: Bool) {
+        switch (expense, income) {
+        case (true, true): viewModel.newCategoryScope = .both
+        case (true, false): viewModel.newCategoryScope = .expense
+        case (false, true): viewModel.newCategoryScope = .income
+        case (false, false): break
+        }
+    }
+
+    private func checkboxRow(title: String, isOn: Bool, action: @escaping (Bool) -> Void) -> some View {
+        Button {
+            action(!isOn)
+        } label: {
+            HStack {
+                Text(title)
+                    .foregroundStyle(.primary)
+                Spacer()
+                Image(systemName: isOn ? "checkmark.square.fill" : "square")
+                    .foregroundStyle(isOn ? Color.accentColor : .secondary)
+                    .font(.title3)
+            }
+        }
+        .buttonStyle(.plain)
     }
 }
