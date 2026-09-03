@@ -6,47 +6,50 @@
 import SwiftData
 import SwiftUI
 
-/// 2-tab shell (Home, Transactions). The "Add" action is exposed as a bottom-bar toolbar
-/// button inside each tab's navigation stack so the system manages its placement alongside
-/// the tab bar. Stats lives inside Home rather than as a separate tab.
+/// Tab shell (Home, Transactions, Bills, Account). The center "search" slot is a scan button
+/// that opens the new-bill editor. Adding a plain transaction lives on the Transactions tab.
 struct RootTabView: View {
-    @State private var isPresentingAdd = false
+    @State private var isPresentingScanBill = false
     @State private var selection = 0
     @State private var previousSelection = 0
 
     var body: some View {
         TabView(selection: $selection) {
             Tab("Home", systemImage: "house.fill", value: 0) {
-                HomeView(isPresentingAdd: $isPresentingAdd)
+                HomeView()
             }
 
             Tab("Transactions", systemImage: "list.bullet", value: 1) {
-                TransactionsListView(isPresentingAdd: $isPresentingAdd)
+                TransactionsListView()
             }
 
-            Tab("Account", systemImage: "person.crop.circle", value: 2) {
+            Tab("Bills", systemImage: "doc.text.image", value: 2) {
+                BillsListView()
+            }
+
+            Tab("Account", systemImage: "person.crop.circle", value: 3) {
                 AccountView()
             }
 
-            Tab("Plus", systemImage: "plus", value: 3, role: .search) {
+            Tab("Scan Bill", systemImage: "doc.viewfinder", value: 4, role: .search) {
                 Color.clear
             }
         }
         .onChange(of: selection) { _, newValue in
-            guard newValue == 3 else {
+            guard newValue == 4 else {
                 previousSelection = newValue
                 return
             }
-            isPresentingAdd = true
+            isPresentingScanBill = true
             selection = previousSelection
         }
-        .sheet(isPresented: $isPresentingAdd) {
-            AddTransactionView()
+        .sheet(isPresented: $isPresentingScanBill) {
+            BillEditorView()
         }
     }
 }
 
 #Preview {
     RootTabView()
-        .modelContainer(for: [Transaction.self, TransactionCategory.self], inMemory: true)
+        .modelContainer(for: [Transaction.self, TransactionCategory.self, Bill.self, BillItem.self], inMemory: true)
 }

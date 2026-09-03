@@ -9,7 +9,6 @@ import SwiftUI
 struct HomeView: View {
     @Query(sort: \Transaction.date, order: .reverse) private var allTransactions: [Transaction]
     @State private var viewModel = HomeViewModel()
-    @Binding var isPresentingAdd: Bool
 
     var body: some View {
         NavigationStack {
@@ -42,6 +41,6 @@ struct HomeView: View {
 }
 
 #Preview {
-    HomeView(isPresentingAdd: .constant(false))
+    HomeView()
         .modelContainer(for: [Transaction.self, TransactionCategory.self], inMemory: true)
 }

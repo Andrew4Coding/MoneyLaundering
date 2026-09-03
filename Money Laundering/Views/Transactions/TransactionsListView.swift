@@ -12,7 +12,7 @@ struct TransactionsListView: View {
 
     @State private var viewModel = TransactionsListViewModel()
     @State private var editingTransaction: Transaction?
-    @Binding var isPresentingAdd: Bool
+    @State private var isPresentingAdd = false
 
     private var filteredTransactions: [Transaction] {
         viewModel.filtered(allTransactions)
@@ -56,6 +56,13 @@ struct TransactionsListView: View {
             .navigationTitle("Transactions")
             .searchable(text: $viewModel.searchText, prompt: "Search title, description, or category")
             .toolbar {
+                ToolbarItem(placement: .topBarLeading) {
+                    Button {
+                        isPresentingAdd = true
+                    } label: {
+                        Label("Add Transaction", systemImage: "plus")
+                    }
+                }
                 ToolbarItem(placement: .topBarTrailing) {
                     Menu {
                         Button("PDF") {
@@ -87,6 +94,9 @@ struct TransactionsListView: View {
             .sheet(item: $editingTransaction) { transaction in
                 AddTransactionView(transaction: transaction)
             }
+            .sheet(isPresented: $isPresentingAdd) {
+                AddTransactionView()
+            }
         }
     }
 
@@ -99,6 +109,6 @@ struct TransactionsListView: View {
 }
 
 #Preview {
-    TransactionsListView(isPresentingAdd: .constant(false))
+    TransactionsListView()
         .modelContainer(for: [Transaction.self, TransactionCategory.self], inMemory: true)
 }

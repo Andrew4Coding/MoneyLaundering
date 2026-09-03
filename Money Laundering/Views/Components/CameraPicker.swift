@@ -53,16 +53,20 @@ struct CameraPicker: UIViewControllerRepresentable {
 
 enum ReceiptImage {
     /// Downscales and JPEG-encodes a bill photo so it stays small enough to sync via CloudKit.
+    /// Always redraws the image so orientation is baked in as `.up` — a raw camera photo carries
+    /// its rotation in a flag that `UIImage.cgImage` (used by OCR) drops, which makes Vision read
+    /// sideways text poorly or not at all.
     static func compressedData(from image: UIImage, maxDimension: CGFloat = 2000) -> Data? {
         let longestSide = max(image.size.width, image.size.height)
-        guard longestSide > maxDimension else { return image.jpegData(compressionQuality: 0.8) }
-
-        let scale = maxDimension / longestSide
+        let scale = longestSide > maxDimension ? maxDimension / longestSide : 1
         let newSize = CGSize(width: image.size.width * scale, height: image.size.height * scale)
-        let renderer = UIGraphicsImageRenderer(size: newSize)
-        let resized = renderer.image { _ in
+
+        let format = UIGraphicsImageRendererFormat.default()
+        format.scale = 1
+        let renderer = UIGraphicsImageRenderer(size: newSize, format: format)
+        let normalized = renderer.image { _ in
             image.draw(in: CGRect(origin: .zero, size: newSize))
         }
-        return resized.jpegData(compressionQuality: 0.8)
+        return normalized.jpegData(compressionQuality: 0.8)
     }
 }
