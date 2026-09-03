@@ -51,7 +51,7 @@ enum MoneySource: String, Codable, CaseIterable, Identifiable, AppEnum {
     var colorHex: String {
         switch self {
         case .grab: "00B14F"
-        case .gopay: "00AED6"
+        case .gopay: "FFFFFF"
         case .bca: "0066AE"
         case .bni: "F37021"
         case .ovo: "4C3494"
@@ -59,8 +59,6 @@ enum MoneySource: String, Codable, CaseIterable, Identifiable, AppEnum {
         }
     }
 
-    /// Which transaction types this source can be used with. Grab is spend-only and QRIS is
-    /// receive-only; everything else works both ways.
     var scope: CategoryScope {
         switch self {
         case .grab: .expense

@@ -6,8 +6,6 @@
 import SwiftData
 import SwiftUI
 
-/// Sheet for creating a custom category from a name, description, and scope. The icon is derived
-/// from the name on save rather than being chosen — or previewed — here.
 struct CustomCategoryEditorView: View {
     @Bindable var viewModel: AddTransactionViewModel
 

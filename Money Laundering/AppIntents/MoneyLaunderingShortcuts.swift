@@ -19,5 +19,15 @@ struct MoneyShortcuts: AppShortcutsProvider {
             shortTitle: "Add Transaction",
             systemImageName: "plus.circle"
         )
+        
+        AppShortcut(
+            intent: TodayTransactionsIntent(),
+            phrases: [
+                "Show today's transactions in \(.applicationName)",
+                "What did I spend today in \(.applicationName)"
+            ],
+            shortTitle: "Today's Transactions",
+            systemImageName: "calendar"
+        )
     }
 }

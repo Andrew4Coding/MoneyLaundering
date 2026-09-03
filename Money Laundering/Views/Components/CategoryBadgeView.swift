@@ -24,15 +24,9 @@ struct CategoryBadgeView: View {
     @ViewBuilder
     private var content: some View {
         if let category {
-            switch category.iconType {
-            case .system:
-                Image(systemName: category.iconValue)
-                    .font(.system(size: size * 0.42, weight: .medium))
-                    .foregroundStyle(AppTheme.categoryColor)
-            case .emoji:
-                Text(category.iconValue)
-                    .font(.system(size: size * 0.5))
-            }
+            Image(systemName: category.iconValue)
+                .font(.system(size: size * 0.42, weight: .medium))
+                .foregroundStyle(AppTheme.categoryColor)
         } else {
             Image(systemName: "questionmark.circle.fill")
                 .font(.system(size: size * 0.42, weight: .medium))

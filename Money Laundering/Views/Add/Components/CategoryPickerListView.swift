@@ -6,9 +6,6 @@
 import SwiftData
 import SwiftUI
 
-/// Full-page category picker, pushed from the Add/Edit Transaction form. Categories are
-/// grouped into a "Pinned" section (if any are pinned) and an "All Categories" section.
-/// Swipe leading to pin/unpin, swipe trailing to edit or delete.
 struct CategoryPickerListView: View {
     let categories: [TransactionCategory]
     @Binding var selection: TransactionCategory?

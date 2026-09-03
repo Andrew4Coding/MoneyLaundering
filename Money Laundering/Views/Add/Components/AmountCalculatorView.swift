@@ -5,8 +5,6 @@
 
 import SwiftUI
 
-/// Full-page numeric entry for the transaction amount, backed by a small calculator so the
-/// user can type expressions like "50000+25000" and see the running total formatted live.
 struct AmountCalculatorView: View {
     @Binding var amountText: String
 

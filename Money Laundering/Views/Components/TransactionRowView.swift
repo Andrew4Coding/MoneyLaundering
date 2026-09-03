@@ -10,7 +10,7 @@ struct TransactionRowView: View {
     let transaction: Transaction
 
     private var amountColor: Color {
-        transaction.type == .income ? .green : .primary
+        transaction.type == .income ? .green : .red
     }
 
     private var signedAmountText: String {

@@ -32,6 +32,14 @@ struct TransactionsListView: View {
                             TransactionRowView(transaction: transaction)
                         }
                         .swipeActions(edge: .trailing) {
+                            Button(role: .destructive) {
+                                modelContext.delete(transaction)
+                                try? modelContext.save()
+                            } label: {
+                                Label("Delete", systemImage: "trash")
+                            }
+                            .tint(.red)
+
                             Button {
                                 editingTransaction = transaction
                             } label: {
@@ -56,13 +64,6 @@ struct TransactionsListView: View {
             .navigationTitle("Transactions")
             .searchable(text: $viewModel.searchText, prompt: "Search title, description, or category")
             .toolbar {
-                ToolbarItem(placement: .topBarLeading) {
-                    Button {
-                        isPresentingAdd = true
-                    } label: {
-                        Label("Add Transaction", systemImage: "plus")
-                    }
-                }
                 ToolbarItem(placement: .topBarTrailing) {
                     Menu {
                         Button("PDF") {

@@ -11,7 +11,7 @@ import UniformTypeIdentifiers
 @Observable
 final class TransactionsListViewModel {
     var searchText: String = ""
-    var selectedPeriod: PeriodOption = .all
+    var selectedPeriod: PeriodOption = .today
     var customRange: ClosedRange<Date>?
 
     var isPresentingExporter = false

@@ -35,6 +35,8 @@
 		74562484948A4648C6F3360A /* TransactionCategory.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF3EEECE10ABADCECFB85B6A /* TransactionCategory.swift */; };
 		7499A77A11F8648D68A67DBD /* Bill.swift in Sources */ = {isa = PBXBuildFile; fileRef = 480F78AE2DD4E383B3496C81 /* Bill.swift */; };
 		765149C23049656C006CEA8D /* BillItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 765149C13049656C006CEA8D /* BillItem.swift */; };
+		765149C43049678A006CEA8D /* ListAllTodayIntent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 765149C33049678A006CEA8D /* ListAllTodayIntent.swift */; };
+		765149C6304967AD006CEA8D /* TransactionEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 765149C5304967AD006CEA8D /* TransactionEntity.swift */; };
 		79D94670A1DED01DFACCF1ED /* RootTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DE09D6EEE6B4DA08127D084 /* RootTabView.swift */; };
 		7B5E3F1ABF2554E15B52E4F0 /* CategoryBadgeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B62E5CAEDB44C0132E2EA8E6 /* CategoryBadgeView.swift */; };
 		7C3B083AE1CE099D77BD21FE /* TransactionsListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 809F48247BDA972054E46097 /* TransactionsListView.swift */; };
@@ -111,6 +113,8 @@
 		72121F63E0B4B747339EC2F1 /* BillEditorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BillEditorView.swift; sourceTree = "<group>"; };
 		72C8FF11F713FF2F67775CA4 /* SourceBadgeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SourceBadgeView.swift; sourceTree = "<group>"; };
 		765149C13049656C006CEA8D /* BillItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BillItem.swift; sourceTree = "<group>"; };
+		765149C33049678A006CEA8D /* ListAllTodayIntent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListAllTodayIntent.swift; sourceTree = "<group>"; };
+		765149C5304967AD006CEA8D /* TransactionEntity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionEntity.swift; sourceTree = "<group>"; };
 		7985EA5B21A958FE4B758181 /* TransactionDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionDetailView.swift; sourceTree = "<group>"; };
 		7EF712240FA13B442534D6DF /* BillSummaryCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BillSummaryCard.swift; sourceTree = "<group>"; };
 		809F48247BDA972054E46097 /* TransactionsListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionsListView.swift; sourceTree = "<group>"; };
@@ -177,6 +181,7 @@
 			isa = PBXGroup;
 			children = (
 				E8DB40E176E0CF056A1ECB4A /* AddTransactionIntent.swift */,
+				765149C33049678A006CEA8D /* ListAllTodayIntent.swift */,
 			);
 			path = Intents;
 			sourceTree = "<group>";
@@ -311,6 +316,7 @@
 			isa = PBXGroup;
 			children = (
 				1F4ECC1E469061B5D0F0987A /* CategoryEntity.swift */,
+				765149C5304967AD006CEA8D /* TransactionEntity.swift */,
 			);
 			path = Query;
 			sourceTree = "<group>";
@@ -532,6 +538,7 @@
 				3986F36243F4173819103738 /* CategoryPickerListView.swift in Sources */,
 				AEBAF0EA5B50C436F94C76E0 /* CategorySeeder.swift in Sources */,
 				B4AA9E34D2EBBAF63D3C1043 /* CategorySymbolResolver.swift in Sources */,
+				765149C43049678A006CEA8D /* ListAllTodayIntent.swift in Sources */,
 				3B9C6A3A7578734672F97CDA /* CurrencyFormatter.swift in Sources */,
 				B739BA8F58756CE1D2290382 /* CustomCategoryEditorView.swift in Sources */,
 				6D39DA3C2ABA7AFF29DD39A0 /* DateRangePickerSheet.swift in Sources */,
@@ -555,6 +562,7 @@
 				D672627213F6D88494340D27 /* StatBucket.swift in Sources */,
 				E9C714291086401AD965B2E9 /* StatsBucketing.swift in Sources */,
 				FBEAD2880C948EB16CBB64D4 /* StatsSectionView.swift in Sources */,
+				765149C6304967AD006CEA8D /* TransactionEntity.swift in Sources */,
 				6225841202958DDAB88C4C60 /* StatsViewModel.swift in Sources */,
 				6AC74ABD9D539A5538499CE0 /* Transaction.swift in Sources */,
 				74562484948A4648C6F3360A /* TransactionCategory.swift in Sources */,

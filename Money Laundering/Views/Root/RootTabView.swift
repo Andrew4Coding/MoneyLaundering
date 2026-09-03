@@ -6,12 +6,15 @@
 import SwiftData
 import SwiftUI
 
-/// Tab shell (Home, Transactions, Bills, Account). The center "search" slot is a scan button
-/// that opens the new-bill editor. Adding a plain transaction lives on the Transactions tab.
+/// Tab shell (Home, Transactions, Bills, Account). The center "search" slot adds a plain
+/// transaction, except on the Bills tab where it becomes a scan button for the new-bill editor.
 struct RootTabView: View {
     @State private var isPresentingScanBill = false
+    @State private var isPresentingAddTransaction = false
     @State private var selection = 0
     @State private var previousSelection = 0
+
+    private var isBillsContext: Bool { selection == 2 }
 
     var body: some View {
         TabView(selection: $selection) {
@@ -31,20 +34,32 @@ struct RootTabView: View {
                 AccountView()
             }
 
-            Tab("Scan Bill", systemImage: "doc.viewfinder", value: 4, role: .search) {
+            Tab(
+                isBillsContext ? "Scan Bill" : "Add Transaction",
+                systemImage: isBillsContext ? "doc.viewfinder" : "plus",
+                value: 4,
+                role: .search
+            ) {
                 Color.clear
             }
         }
-        .onChange(of: selection) { _, newValue in
+        .onChange(of: selection) { oldValue, newValue in
             guard newValue == 4 else {
                 previousSelection = newValue
                 return
             }
-            isPresentingScanBill = true
+            if oldValue == 2 {
+                isPresentingScanBill = true
+            } else {
+                isPresentingAddTransaction = true
+            }
             selection = previousSelection
         }
         .sheet(isPresented: $isPresentingScanBill) {
             BillEditorView()
+        }
+        .sheet(isPresented: $isPresentingAddTransaction) {
+            AddTransactionView()
         }
     }
 }
