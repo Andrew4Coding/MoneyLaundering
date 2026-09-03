@@ -44,4 +44,10 @@ enum CurrencyFormatter {
         guard !digitsOnly.isEmpty, let value = Decimal(string: digitsOnly) else { return nil }
         return value
     }
+
+    /// Digits-only string for editing in a text field, e.g. `45000`. Empty for zero.
+    static func plainAmount(_ amount: Decimal) -> String {
+        let whole = NSDecimalNumber(decimal: BillMath.rounded(amount)).intValue
+        return whole == 0 ? "" : String(whole)
+    }
 }
