@@ -43,10 +43,10 @@ final class TransactionCategory {
     var name: String = ""
     var iconTypeRaw: String = CategoryIconType.system.rawValue
     var iconValue: String = "questionmark.circle"
-    var colorHex: String = "8E8E93"
     var categoryDescription: String = ""
     var appliesToRaw: String = CategoryScope.both.rawValue
     var isDefault: Bool = false
+    var isPinned: Bool = false
     var createdAt: Date = Date.now
 
     @Relationship(deleteRule: .nullify, inverse: \Transaction.category)
@@ -66,19 +66,19 @@ final class TransactionCategory {
         name: String,
         iconType: CategoryIconType,
         iconValue: String,
-        colorHex: String,
         categoryDescription: String = "",
         appliesTo: CategoryScope = .both,
         isDefault: Bool = false,
+        isPinned: Bool = false,
         createdAt: Date = .now
     ) {
         self.name = name
         self.iconTypeRaw = iconType.rawValue
         self.iconValue = iconValue
-        self.colorHex = colorHex
         self.categoryDescription = categoryDescription
         self.appliesToRaw = appliesTo.rawValue
         self.isDefault = isDefault
+        self.isPinned = isPinned
         self.createdAt = createdAt
     }
 }

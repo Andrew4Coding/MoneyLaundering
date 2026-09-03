@@ -3,6 +3,7 @@
 //  Money Laundering
 //
 
+import PhotosUI
 import SwiftUI
 import SwiftData
 
@@ -12,6 +13,9 @@ struct AddTransactionView: View {
     @Query(sort: \TransactionCategory.name) private var allCategories: [TransactionCategory]
 
     @State private var viewModel: AddTransactionViewModel
+    @State private var receiptPhotoItem: PhotosPickerItem?
+    @State private var isPresentingCamera = false
+    @State private var isPresentingReceiptViewer = false
 
     init(transaction: Transaction? = nil) {
         if let transaction {
@@ -32,27 +36,20 @@ struct AddTransactionView: View {
                     }
                     .pickerStyle(.segmented)
                     .onChange(of: viewModel.type) { _, _ in
-                        if let selected = viewModel.selectedCategory, !selected.appliesTo.allows(viewModel.type) {
-                            viewModel.selectedCategory = nil
-                        }
+                        viewModel.typeDidChange()
                     }
                 }
                 .listRowBackground(Color.clear)
                 .listRowInsets(EdgeInsets())
 
                 Section("Amount") {
-                    TextField("Rp 0", text: $viewModel.amountText)
-                        .keyboardType(.numberPad)
-                        .font(.title2.weight(.semibold))
-                }
-
-                Section("Category") {
-                    CategoryPickerView(
-                        categories: viewModel.availableCategories(from: allCategories),
-                        selection: $viewModel.selectedCategory,
-                        onCreateNew: { viewModel.isPresentingCustomCategoryEditor = true }
-                    )
-                    .padding(.vertical, 4)
+                    NavigationLink {
+                        AmountCalculatorView(amountText: $viewModel.amountText)
+                    } label: {
+                        Text(viewModel.parsedAmount.map(CurrencyFormatter.rupiah) ?? "Rp 0")
+                            .font(.title2.weight(.semibold))
+                            .foregroundStyle(viewModel.parsedAmount == nil ? .secondary : .primary)
+                    }
                 }
 
                 Section("Details") {
@@ -61,14 +58,40 @@ struct AddTransactionView: View {
                         .lineLimit(2...4)
                 }
 
+                Section("Category") {
+                    NavigationLink {
+                        CategoryPickerListView(
+                            categories: viewModel.availableCategories(from: allCategories),
+                            selection: $viewModel.selectedCategory,
+                            onCreateNew: { viewModel.beginCreatingCategory() },
+                            onEdit: { viewModel.beginEditingCategory($0) },
+                            onDelete: { viewModel.deleteCategory($0, context: modelContext) },
+                            onTogglePin: { viewModel.togglePin($0, context: modelContext) }
+                        )
+                    } label: {
+                        HStack(spacing: 12) {
+                            CategoryBadgeView(category: viewModel.selectedCategory, size: 36)
+                            Text(viewModel.selectedCategory?.name ?? "Select a category")
+                                .foregroundStyle(viewModel.selectedCategory == nil ? .secondary : .primary)
+                        }
+                    }
+                }
+
                 Section("Source") {
-                    MoneySourcePickerView(selection: $viewModel.source)
+                    MoneySourcePickerView(selection: $viewModel.source, transactionType: viewModel.type)
                 }
 
                 Section("Date") {
                     DatePicker("Date", selection: $viewModel.date, displayedComponents: [.date])
                         .datePickerStyle(.compact)
                 }
+
+                ReceiptPickerSection(
+                    imageData: $viewModel.receiptImageData,
+                    photoItem: $receiptPhotoItem,
+                    onTakePhoto: { isPresentingCamera = true },
+                    onViewReceipt: { isPresentingReceiptViewer = true }
+                )
 
                 if let errorMessage = viewModel.errorMessage {
                     Section {
@@ -80,6 +103,7 @@ struct AddTransactionView: View {
             }
             .navigationTitle(viewModel.isEditing ? "Edit Transaction" : "Add Transaction")
             .navigationBarTitleDisplayMode(.inline)
+            .toolbarBackgroundVisibility(.visible, for: .navigationBar)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
                     Button("Cancel") { dismiss() }
@@ -93,8 +117,29 @@ struct AddTransactionView: View {
                     .disabled(!viewModel.isValid)
                 }
             }
+            .onChange(of: receiptPhotoItem) { _, newValue in
+                guard let newValue else { return }
+                Task {
+                    if let data = try? await newValue.loadTransferable(type: Data.self),
+                       let image = UIImage(data: data) {
+                        viewModel.receiptImageData = ReceiptImage.compressedData(from: image)
+                    }
+                }
+            }
             .sheet(isPresented: $viewModel.isPresentingCustomCategoryEditor) {
                 CustomCategoryEditorView(viewModel: viewModel)
+            }
+            .fullScreenCover(isPresented: $isPresentingCamera) {
+                CameraPicker { data in
+                    if let data { viewModel.receiptImageData = data }
+                    isPresentingCamera = false
+                }
+                .ignoresSafeArea()
+            }
+            .fullScreenCover(isPresented: $isPresentingReceiptViewer) {
+                if let data = viewModel.receiptImageData {
+                    ReceiptViewer(imageData: data) { isPresentingReceiptViewer = false }
+                }
             }
         }
     }

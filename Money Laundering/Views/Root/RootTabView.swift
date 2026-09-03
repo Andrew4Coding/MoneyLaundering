@@ -15,33 +15,21 @@ struct RootTabView: View {
     @State private var previousSelection = 0
 
     var body: some View {
-        ZStack {
-            LinearGradient(
-                gradient: Gradient(colors: [
-                    Color(red: 1.0, green: 0.6, blue: 0.3),
-                    Color(red: 1.0, green: 0.85, blue: 0.7)
-                ]),
-                startPoint: .topLeading,
-                endPoint: .bottomTrailing
-            )
-            .ignoresSafeArea()
+        TabView(selection: $selection) {
+            Tab("Home", systemImage: "house.fill", value: 0) {
+                HomeView(isPresentingAdd: $isPresentingAdd)
+            }
 
-            TabView(selection: $selection) {
-                Tab("Home", systemImage: "house.fill", value: 0) {
-                    HomeView(isPresentingAdd: $isPresentingAdd)
-                }
+            Tab("Transactions", systemImage: "list.bullet", value: 1) {
+                TransactionsListView(isPresentingAdd: $isPresentingAdd)
+            }
 
-                Tab("Transactions", systemImage: "list.bullet", value: 1) {
-                    TransactionsListView(isPresentingAdd: $isPresentingAdd)
-                }
+            Tab("Account", systemImage: "person.crop.circle", value: 2) {
+                AccountView()
+            }
 
-                Tab("Account", systemImage: "person.crop.circle", value: 2) {
-                    AccountView()
-                }
-                
-                Tab("Plus", systemImage: "plus", value: 3, role: .search) {
-                    Color.clear
-                }
+            Tab("Plus", systemImage: "plus", value: 3, role: .search) {
+                Color.clear
             }
         }
         .onChange(of: selection) { _, newValue in

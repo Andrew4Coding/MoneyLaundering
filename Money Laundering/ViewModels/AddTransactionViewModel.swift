@@ -16,12 +16,69 @@ final class AddTransactionViewModel {
     var date: Date = .now
     var descriptionText: String = ""
     var selectedCategory: TransactionCategory?
+    var receiptImageData: Data?
 
     var isPresentingCustomCategoryEditor = false
-    var newCategoryEmoji: String = ""
     var newCategoryName: String = ""
     var newCategoryDescription: String = ""
     var newCategoryScope: CategoryScope = .expense
+
+    /// Non-nil when the category editor sheet is editing an existing category rather than
+    /// creating a new one.
+    private(set) var editingCategory: TransactionCategory?
+
+    var isEditingCategory: Bool { editingCategory != nil }
+
+    /// Icon chosen by Apple Intelligence for the current name/description, when available.
+    var aiSuggestedSymbol: String?
+    var isSuggestingCategoryIcon = false
+    private var iconSuggestionTask: Task<Void, Never>?
+
+    /// Symbol the new/edited category will get — Apple Intelligence's pick when we have one,
+    /// otherwise the keyword-based resolver. Never chosen by hand.
+    var resolvedCategorySymbol: String {
+        aiSuggestedSymbol ?? CategorySymbolResolver.symbol(
+            forName: newCategoryName,
+            description: newCategoryDescription,
+            scope: newCategoryScope
+        )
+    }
+
+    var isAppleIntelligenceIconAvailable: Bool {
+        CategoryIconIntelligence.isAvailable
+    }
+
+    /// Debounced request for an Apple Intelligence icon suggestion based on the current
+    /// name/description/scope. Safe to call on every keystroke.
+    @MainActor
+    func requestIconSuggestion() {
+        iconSuggestionTask?.cancel()
+
+        let name = newCategoryName.trimmingCharacters(in: .whitespaces)
+        let description = newCategoryDescription.trimmingCharacters(in: .whitespaces)
+        let scope = newCategoryScope
+
+        guard name.count >= 2, CategoryIconIntelligence.isAvailable else {
+            aiSuggestedSymbol = nil
+            isSuggestingCategoryIcon = false
+            return
+        }
+
+        iconSuggestionTask = Task { [weak self] in
+            try? await Task.sleep(for: .milliseconds(500))
+            guard !Task.isCancelled else { return }
+
+            self?.isSuggestingCategoryIcon = true
+            let symbol = await CategoryIconIntelligence.suggestSymbol(
+                name: name,
+                description: description,
+                scope: scope
+            )
+            guard !Task.isCancelled else { return }
+            self?.aiSuggestedSymbol = symbol
+            self?.isSuggestingCategoryIcon = false
+        }
+    }
 
     var errorMessage: String?
 
@@ -41,6 +98,7 @@ final class AddTransactionViewModel {
         date = transaction.date
         descriptionText = transaction.transactionDescription
         selectedCategory = transaction.category
+        receiptImageData = transaction.receiptImageData
     }
 
     /// Categories applicable to the currently selected transaction type.
@@ -48,6 +106,16 @@ final class AddTransactionViewModel {
         allCategories
             .filter { $0.appliesTo.allows(type) }
             .sorted { $0.name < $1.name }
+    }
+
+    /// Clears a category and/or source that no longer applies after the type is switched.
+    func typeDidChange() {
+        if let selected = selectedCategory, !selected.appliesTo.allows(type) {
+            selectedCategory = nil
+        }
+        if !source.scope.allows(type) {
+            source = MoneySource.available(for: type).first ?? .bca
+        }
     }
 
     var parsedAmount: Decimal? {
@@ -61,8 +129,7 @@ final class AddTransactionViewModel {
     }
 
     var isCustomCategoryValid: Bool {
-        !newCategoryEmoji.trimmingCharacters(in: .whitespaces).isEmpty
-            && !newCategoryName.trimmingCharacters(in: .whitespaces).isEmpty
+        !newCategoryName.trimmingCharacters(in: .whitespaces).isEmpty
     }
 
     @discardableResult
@@ -80,6 +147,7 @@ final class AddTransactionViewModel {
             editingTransaction.date = date
             editingTransaction.transactionDescription = descriptionText.trimmingCharacters(in: .whitespaces)
             editingTransaction.category = selectedCategory
+            editingTransaction.receiptImageData = receiptImageData
         } else {
             let transaction = Transaction(
                 type: type,
@@ -88,7 +156,8 @@ final class AddTransactionViewModel {
                 source: source,
                 date: date,
                 description: descriptionText.trimmingCharacters(in: .whitespaces),
-                category: selectedCategory
+                category: selectedCategory,
+                receiptImageData: receiptImageData
             )
             context.insert(transaction)
         }
@@ -96,29 +165,79 @@ final class AddTransactionViewModel {
         return true
     }
 
+    /// Resets the editor fields and opens the sheet in "create" mode.
+    func beginCreatingCategory() {
+        editingCategory = nil
+        newCategoryName = ""
+        newCategoryDescription = ""
+        newCategoryScope = type == .income ? .income : .expense
+        iconSuggestionTask?.cancel()
+        aiSuggestedSymbol = nil
+        isSuggestingCategoryIcon = false
+        isPresentingCustomCategoryEditor = true
+    }
+
+    /// Populates the editor fields from an existing category and opens the sheet in "edit" mode.
+    func beginEditingCategory(_ category: TransactionCategory) {
+        editingCategory = category
+        newCategoryName = category.name
+        newCategoryDescription = category.categoryDescription
+        newCategoryScope = category.appliesTo
+        iconSuggestionTask?.cancel()
+        aiSuggestedSymbol = nil
+        isSuggestingCategoryIcon = false
+        isPresentingCustomCategoryEditor = true
+    }
+
     @discardableResult
-    func createCustomCategory(context: ModelContext) -> TransactionCategory? {
+    func saveCustomCategory(context: ModelContext) -> TransactionCategory? {
         guard isCustomCategoryValid else { return nil }
 
-        let category = TransactionCategory(
-            name: newCategoryName.trimmingCharacters(in: .whitespaces),
-            iconType: .emoji,
-            iconValue: newCategoryEmoji.trimmingCharacters(in: .whitespaces),
-            colorHex: "8E8E93",
-            categoryDescription: newCategoryDescription.trimmingCharacters(in: .whitespaces),
-            appliesTo: newCategoryScope,
-            isDefault: false
-        )
-        context.insert(category)
+        let trimmedName = newCategoryName.trimmingCharacters(in: .whitespaces)
+        let trimmedDescription = newCategoryDescription.trimmingCharacters(in: .whitespaces)
+        let symbolName = resolvedCategorySymbol
+
+        let category: TransactionCategory
+        if let editingCategory {
+            editingCategory.name = trimmedName
+            editingCategory.iconType = .system
+            editingCategory.iconValue = symbolName
+            editingCategory.categoryDescription = trimmedDescription
+            editingCategory.appliesTo = newCategoryScope
+            category = editingCategory
+        } else {
+            let created = TransactionCategory(
+                name: trimmedName,
+                iconType: .system,
+                iconValue: symbolName,
+                categoryDescription: trimmedDescription,
+                appliesTo: newCategoryScope,
+                isDefault: false
+            )
+            context.insert(created)
+            category = created
+        }
+
         try? context.save()
 
         selectedCategory = category
-        newCategoryEmoji = ""
-        newCategoryName = ""
-        newCategoryDescription = ""
-        newCategoryScope = .expense
         isPresentingCustomCategoryEditor = false
 
         return category
+    }
+
+    /// Deletes a category. `Transaction.category` nullifies on delete, so existing
+    /// transactions referencing it simply lose their category rather than being removed.
+    func deleteCategory(_ category: TransactionCategory, context: ModelContext) {
+        if selectedCategory?.persistentModelID == category.persistentModelID {
+            selectedCategory = nil
+        }
+        context.delete(category)
+        try? context.save()
+    }
+
+    func togglePin(_ category: TransactionCategory, context: ModelContext) {
+        category.isPinned.toggle()
+        try? context.save()
     }
 }

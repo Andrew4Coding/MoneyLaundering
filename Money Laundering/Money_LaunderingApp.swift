@@ -33,7 +33,7 @@ struct Money_LaunderingApp: App {
                     SignInView()
                 }
             }
-            .tint(.orange)
+            .tint(AppTheme.accent)
             .environment(authService)
         }
         .modelContainer(container)

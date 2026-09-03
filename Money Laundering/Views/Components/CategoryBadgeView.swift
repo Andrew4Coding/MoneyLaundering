@@ -5,7 +5,8 @@
 
 import SwiftUI
 
-/// Renders a category's "logo" — an SF Symbol for default categories, an emoji for custom ones.
+/// Renders a category's logo. Every category shares one fixed colour — they are told apart by
+/// symbol and name, not by colour.
 struct CategoryBadgeView: View {
     let category: TransactionCategory?
     var size: CGFloat = 44
@@ -13,7 +14,7 @@ struct CategoryBadgeView: View {
     var body: some View {
         ZStack {
             Circle()
-                .fill(Color(hex: category?.colorHex ?? "8E8E93").opacity(0.18))
+                .fill(AppTheme.categoryColor.opacity(0.18))
 
             content
         }
@@ -27,7 +28,7 @@ struct CategoryBadgeView: View {
             case .system:
                 Image(systemName: category.iconValue)
                     .font(.system(size: size * 0.42, weight: .medium))
-                    .foregroundStyle(Color(hex: category.colorHex))
+                    .foregroundStyle(AppTheme.categoryColor)
             case .emoji:
                 Text(category.iconValue)
                     .font(.system(size: size * 0.5))
@@ -40,27 +41,10 @@ struct CategoryBadgeView: View {
     }
 }
 
-extension Color {
-    /// Creates a color from a hex string like "FF9500" or "#FF9500".
-    init(hex: String) {
-        var hexString = hex.trimmingCharacters(in: .whitespacesAndNewlines)
-        hexString = hexString.replacingOccurrences(of: "#", with: "")
-
-        var rgbValue: UInt64 = 0
-        Scanner(string: hexString).scanHexInt64(&rgbValue)
-
-        let r = Double((rgbValue & 0xFF0000) >> 16) / 255
-        let g = Double((rgbValue & 0x00FF00) >> 8) / 255
-        let b = Double(rgbValue & 0x0000FF) / 255
-
-        self.init(red: r, green: g, blue: b)
-    }
-}
-
 #Preview {
     HStack(spacing: 16) {
-        CategoryBadgeView(category: TransactionCategory(name: "Food", iconType: .system, iconValue: "fork.knife", colorHex: "FF9500", isDefault: true))
-        CategoryBadgeView(category: TransactionCategory(name: "Gaming", iconType: .emoji, iconValue: "🎮", colorHex: "5856D6"))
+        CategoryBadgeView(category: TransactionCategory(name: "Food", iconType: .system, iconValue: "fork.knife", isDefault: true))
+        CategoryBadgeView(category: TransactionCategory(name: "Salary", iconType: .system, iconValue: "banknote.fill", isDefault: true))
         CategoryBadgeView(category: nil)
     }
     .padding()

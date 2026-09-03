@@ -15,6 +15,7 @@ struct TransactionDetailView: View {
 
     @State private var isPresentingEdit = false
     @State private var isPresentingDeleteConfirm = false
+    @State private var isPresentingReceipt = false
 
     private var amountColor: Color {
         transaction.type == .income ? .green : .red
@@ -48,6 +49,10 @@ struct TransactionDetailView: View {
                     detailRow(label: "Source", value: transaction.source.displayName)
                     Divider().padding(.leading, 16)
                     detailRow(label: "Date", value: transaction.date.formatted(date: .long, time: .omitted))
+                    if transaction.receiptImageData != nil {
+                        Divider().padding(.leading, 16)
+                        receiptRow
+                    }
                     if !transaction.transactionDescription.isEmpty {
                         Divider().padding(.leading, 16)
                         detailRow(label: "Description", value: transaction.transactionDescription)
@@ -59,6 +64,7 @@ struct TransactionDetailView: View {
         }
         .navigationTitle("Transaction")
         .navigationBarTitleDisplayMode(.inline)
+        .toolbarBackgroundVisibility(.visible, for: .navigationBar)
         .toolbar {
             ToolbarItem(placement: .primaryAction) {
                 Menu {
@@ -72,9 +78,15 @@ struct TransactionDetailView: View {
                     } label: {
                         Label("Delete", systemImage: "trash")
                     }
+                    .tint(.red)
                 } label: {
-                    Image(systemName: "ellipsis.circle")
+                    Image(systemName: "ellipsis")
                 }
+            }
+        }
+        .fullScreenCover(isPresented: $isPresentingReceipt) {
+            if let data = transaction.receiptImageData {
+                ReceiptViewer(imageData: data) { isPresentingReceipt = false }
             }
         }
         .sheet(isPresented: $isPresentingEdit) {
@@ -94,6 +106,32 @@ struct TransactionDetailView: View {
         }
     }
 
+    private var receiptRow: some View {
+        Button {
+            isPresentingReceipt = true
+        } label: {
+            HStack {
+                Text("Bill")
+                    .font(.subheadline)
+                    .foregroundStyle(.secondary)
+                Spacer()
+                if let data = transaction.receiptImageData, let image = UIImage(data: data) {
+                    Image(uiImage: image)
+                        .resizable()
+                        .scaledToFill()
+                        .frame(width: 44, height: 44)
+                        .clipShape(RoundedRectangle(cornerRadius: 6))
+                }
+                Image(systemName: "chevron.right")
+                    .font(.footnote.weight(.semibold))
+                    .foregroundStyle(.tertiary)
+            }
+            .padding(16)
+            .contentShape(Rectangle())
+        }
+        .buttonStyle(.plain)
+    }
+
     private func detailRow(label: String, value: String) -> some View {
         HStack(alignment: .top) {
             Text(label)
@@ -109,7 +147,7 @@ struct TransactionDetailView: View {
 }
 
 #Preview {
-    let category = TransactionCategory(name: "Food", iconType: .system, iconValue: "fork.knife", colorHex: "FF9500", isDefault: true)
+    let category = TransactionCategory(name: "Food", iconType: .system, iconValue: "fork.knife", isDefault: true)
     NavigationStack {
         TransactionDetailView(
             transaction: Transaction(type: .expense, title: "Lunch", amount: 45000, source: .grab, date: .now, description: "Padang food with friends", category: category)

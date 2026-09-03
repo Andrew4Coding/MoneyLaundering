@@ -11,6 +11,7 @@ struct TransactionsListView: View {
     @Environment(\.modelContext) private var modelContext
 
     @State private var viewModel = TransactionsListViewModel()
+    @State private var editingTransaction: Transaction?
     @Binding var isPresentingAdd: Bool
 
     private var filteredTransactions: [Transaction] {
@@ -30,6 +31,14 @@ struct TransactionsListView: View {
                         } label: {
                             TransactionRowView(transaction: transaction)
                         }
+                        .swipeActions(edge: .trailing) {
+                            Button {
+                                editingTransaction = transaction
+                            } label: {
+                                Label("Edit", systemImage: "pencil")
+                            }
+                            .tint(.blue)
+                        }
                     }
                     .onDelete(perform: delete)
                 }
@@ -46,6 +55,35 @@ struct TransactionsListView: View {
             }
             .navigationTitle("Transactions")
             .searchable(text: $viewModel.searchText, prompt: "Search title, description, or category")
+            .toolbar {
+                ToolbarItem(placement: .topBarTrailing) {
+                    Menu {
+                        ForEach(TransactionExportFormat.allCases) { format in
+                            Button(format.displayName) {
+                                viewModel.startExport(format: format, transactions: filteredTransactions)
+                            }
+                        }
+                    } label: {
+                        Label("Export", systemImage: "square.and.arrow.up")
+                    }
+                }
+            }
+            .fileExporter(
+                isPresented: $viewModel.isPresentingExporter,
+                document: viewModel.exportDocument,
+                contentType: viewModel.exportFormat.contentType,
+                defaultFilename: "Transactions"
+            ) { result in
+                viewModel.handleExportResult(result)
+            }
+            .alert("Transactions", isPresented: $viewModel.isPresentingStatusAlert) {
+                Button("OK", role: .cancel) {}
+            } message: {
+                Text(viewModel.statusMessage ?? "")
+            }
+            .sheet(item: $editingTransaction) { transaction in
+                AddTransactionView(transaction: transaction)
+            }
         }
     }
 

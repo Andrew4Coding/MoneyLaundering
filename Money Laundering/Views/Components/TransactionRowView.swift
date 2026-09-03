@@ -51,7 +51,7 @@ struct TransactionRowView: View {
 }
 
 #Preview {
-    let category = TransactionCategory(name: "Food", iconType: .system, iconValue: "fork.knife", colorHex: "FF9500", isDefault: true)
+    let category = TransactionCategory(name: "Food", iconType: .system, iconValue: "fork.knife", isDefault: true)
     List {
         TransactionRowView(transaction: Transaction(type: .expense, title: "Lunch", amount: 45000, source: .grab, date: .now, description: "", category: category))
         TransactionRowView(transaction: Transaction(type: .income, title: "July Salary", amount: 5_000_000, source: .bca, date: .now, description: "", category: category))

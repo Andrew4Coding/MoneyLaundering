@@ -14,7 +14,6 @@ final class TransactionsListViewModel {
     var customRange: ClosedRange<Date>?
 
     var isPresentingExporter = false
-    var isPresentingImporter = false
     var exportDocument: TransactionDocument?
     var exportFormat: TransactionExportFormat = .csv
 
@@ -33,36 +32,6 @@ final class TransactionsListViewModel {
             statusMessage = "Exported to \(url.lastPathComponent)."
         case .failure(let error):
             statusMessage = "Export failed: \(error.localizedDescription)"
-        }
-        isPresentingStatusAlert = true
-    }
-
-    func handleImportResult(_ result: Result<[URL], Error>, context: ModelContext) {
-        switch result {
-        case .success(let urls):
-            guard let url = urls.first else { return }
-            importTransactions(from: url, context: context)
-        case .failure(let error):
-            statusMessage = "Import failed: \(error.localizedDescription)"
-            isPresentingStatusAlert = true
-        }
-    }
-
-    private func importTransactions(from url: URL, context: ModelContext) {
-        guard url.startAccessingSecurityScopedResource() else {
-            statusMessage = "Couldn't access the selected file."
-            isPresentingStatusAlert = true
-            return
-        }
-        defer { url.stopAccessingSecurityScopedResource() }
-
-        do {
-            let data = try Data(contentsOf: url)
-            let format: TransactionExportFormat = url.pathExtension.lowercased() == "json" ? .json : .csv
-            let count = try TransactionIOService.importTransactions(from: data, format: format, context: context)
-            statusMessage = "Imported \(count) transaction\(count == 1 ? "" : "s")."
-        } catch {
-            statusMessage = "Import failed: \(error.localizedDescription)"
         }
         isPresentingStatusAlert = true
     }

@@ -50,12 +50,10 @@ final class AuthenticationService: NSObject {
         guard let credential = authorization.credential as? ASAuthorizationAppleIDCredential else { return }
 
         let userID = credential.user
-        let fullName = [credential.fullName?.givenName, credential.fullName?.familyName]
-            .compactMap { $0 }
-            .joined(separator: " ")
         // Apple only supplies fullName on the very first authorization for a given user;
         // fall back to whatever was previously stored on subsequent sign-ins.
-        let displayName = fullName.isEmpty ? UserDefaults.standard.string(forKey: Self.displayNameKey) : fullName
+        let formattedName = Self.formattedName(from: credential.fullName)
+        let displayName = formattedName ?? UserDefaults.standard.string(forKey: Self.displayNameKey)
 
         UserDefaults.standard.set(userID, forKey: Self.userIDKey)
         if let displayName {
@@ -63,6 +61,20 @@ final class AuthenticationService: NSObject {
         }
 
         state = .signedIn(userID: userID, displayName: displayName)
+    }
+
+    /// Builds a human-readable name from Apple's `PersonNameComponents`, returning `nil` when
+    /// no usable name parts were supplied (Apple sends empty components on repeat sign-ins).
+    private static func formattedName(from components: PersonNameComponents?) -> String? {
+        guard let components else { return nil }
+        let hasAnyPart = [components.givenName, components.familyName, components.nickname]
+            .contains { !($0 ?? "").isEmpty }
+        guard hasAnyPart else { return nil }
+
+        let formatter = PersonNameComponentsFormatter()
+        formatter.style = .medium
+        let formatted = formatter.string(from: components).trimmingCharacters(in: .whitespaces)
+        return formatted.isEmpty ? nil : formatted
     }
 
     func signOut() {

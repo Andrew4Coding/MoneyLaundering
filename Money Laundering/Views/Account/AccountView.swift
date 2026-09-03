@@ -11,9 +11,12 @@ struct AccountView: View {
     var body: some View {
         NavigationStack {
             List {
-                if case .signedIn(_, let displayName) = authService.state {
+                if case .signedIn(let userID, let displayName) = authService.state {
                     Section("Signed in with Apple") {
-                        LabeledContent("Name", value: displayName ?? "Apple ID user")
+                        if let displayName, !displayName.isEmpty {
+                            LabeledContent("Name", value: displayName)
+                        }
+                        LabeledContent("Apple ID", value: maskedIdentifier(userID))
                     }
                 }
 
@@ -32,6 +35,12 @@ struct AccountView: View {
             }
             .navigationTitle("Account")
         }
+    }
+
+    /// Apple's opaque user identifier is long and sensitive; show only a recognizable prefix.
+    private func maskedIdentifier(_ userID: String) -> String {
+        let prefix = userID.split(separator: ".").first.map(String.init) ?? String(userID.prefix(6))
+        return "\(prefix)…"
     }
 }
 

@@ -16,6 +16,9 @@ final class Transaction {
     var transactionDescription: String = ""
     var createdAt: Date = Date.now
 
+    @Attribute(.externalStorage)
+    var receiptImageData: Data?
+
     var category: TransactionCategory?
 
     var type: TransactionType {
@@ -36,6 +39,7 @@ final class Transaction {
         date: Date,
         description: String = "",
         category: TransactionCategory?,
+        receiptImageData: Data? = nil,
         createdAt: Date = .now
     ) {
         self.typeRaw = type.rawValue
@@ -45,6 +49,7 @@ final class Transaction {
         self.date = date
         self.transactionDescription = description
         self.category = category
+        self.receiptImageData = receiptImageData
         self.createdAt = createdAt
     }
 }

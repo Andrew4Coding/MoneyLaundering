@@ -28,6 +28,8 @@ struct HomeView: View {
                         totalExpense: viewModel.totalExpense(from: allTransactions)
                     )
 
+                    CategoryBreakdownChart(slices: viewModel.categoryBreakdown(from: allTransactions))
+
                     StatsSectionView(transactions: allTransactions, selectedPeriod: $viewModel.selectedPeriod)
 
                     RecentTransactionsSection(transactions: viewModel.recentTransactions(from: allTransactions))

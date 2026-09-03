@@ -49,71 +49,6 @@ enum TransactionIOService {
         }
     }
 
-    /// Inserts a `Transaction` for each parsed record. Categories are matched by name
-    /// (case-insensitive) against what already exists — mirroring `CategorySeeder`'s
-    /// dedupe convention — and created on the fly if no match is found, so an import never
-    /// silently drops a category label.
-    @discardableResult
-    static func importTransactions(from data: Data, format: TransactionExportFormat, context: ModelContext) throws -> Int {
-        let records: [Record]
-        switch format {
-        case .json:
-            let decoder = JSONDecoder()
-            decoder.dateDecodingStrategy = .iso8601
-            records = try decoder.decode([Record].self, from: data)
-        case .csv:
-            records = try decodeCSV(data)
-        }
-
-        let existingCategories = try context.fetch(FetchDescriptor<TransactionCategory>())
-        var categoriesByName = Dictionary(
-            existingCategories.map { ($0.name.lowercased(), $0) },
-            uniquingKeysWith: { first, _ in first }
-        )
-
-        var importedCount = 0
-        for record in records {
-            guard let type = TransactionType(rawValue: record.type),
-                  let source = MoneySource(rawValue: record.source),
-                  let amount = Decimal(string: record.amount) else { continue }
-
-            var category: TransactionCategory?
-            if let name = record.category, !name.trimmingCharacters(in: .whitespaces).isEmpty {
-                let key = name.lowercased()
-                if let existing = categoriesByName[key] {
-                    category = existing
-                } else {
-                    let created = TransactionCategory(
-                        name: name,
-                        iconType: .system,
-                        iconValue: "questionmark.circle",
-                        colorHex: "8E8E93",
-                        appliesTo: .both,
-                        isDefault: false
-                    )
-                    context.insert(created)
-                    categoriesByName[key] = created
-                    category = created
-                }
-            }
-
-            let transaction = Transaction(
-                type: type,
-                title: record.title,
-                amount: amount,
-                source: source,
-                date: record.date,
-                description: record.description,
-                category: category
-            )
-            context.insert(transaction)
-            importedCount += 1
-        }
-
-        try context.save()
-        return importedCount
-    }
-
     // MARK: - CSV
 
     private static let csvHeader = ["type", "title", "amount", "source", "date", "description", "category"]
@@ -130,58 +65,13 @@ enum TransactionIOService {
                 record.description,
                 record.category ?? ""
             ]
-            lines.append(fields.map(escapeCSVField).joined(separator: ","))
+            lines.append(fields.map { escapeCSVField($0) }.joined(separator: ","))
         }
         return lines.joined(separator: "\n").data(using: .utf8) ?? Data()
-    }
-
-    private static func decodeCSV(_ data: Data) throws -> [Record] {
-        guard let text = String(data: data, encoding: .utf8) else {
-            throw CocoaError(.fileReadCorruptFile)
-        }
-
-        var lines = text.split(separator: "\n", omittingEmptySubsequences: true).map(String.init)
-        guard !lines.isEmpty else { return [] }
-        lines.removeFirst()
-
-        return lines.compactMap { line in
-            let fields = parseCSVLine(line)
-            guard fields.count >= 6, let date = isoFormatter.date(from: fields[4]) else { return nil }
-            return Record(
-                type: fields[0],
-                title: fields[1],
-                amount: fields[2],
-                source: fields[3],
-                date: date,
-                description: fields[5],
-                category: (fields.count > 6 && !fields[6].isEmpty) ? fields[6] : nil
-            )
-        }
     }
 
     private static func escapeCSVField(_ field: String) -> String {
         guard field.contains(",") || field.contains("\"") || field.contains("\n") else { return field }
         return "\"\(field.replacingOccurrences(of: "\"", with: "\"\""))\""
-    }
-
-    private static func parseCSVLine(_ line: String) -> [String] {
-        var fields: [String] = []
-        var current = ""
-        var insideQuotes = false
-
-        var iterator = line.makeIterator()
-        while let char = iterator.next() {
-            switch char {
-            case "\"":
-                insideQuotes.toggle()
-            case "," where !insideQuotes:
-                fields.append(current)
-                current = ""
-            default:
-                current.append(char)
-            }
-        }
-        fields.append(current)
-        return fields
     }
 }

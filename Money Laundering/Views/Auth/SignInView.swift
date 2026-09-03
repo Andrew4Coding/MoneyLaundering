@@ -11,23 +11,13 @@ struct SignInView: View {
 
     var body: some View {
         ZStack {
-            LinearGradient(
-                gradient: Gradient(colors: [
-                    Color(red: 1.0, green: 0.6, blue: 0.3),
-                    Color(red: 1.0, green: 0.85, blue: 0.7)
-                ]),
-                startPoint: .topLeading,
-                endPoint: .bottomTrailing
-            )
-            .ignoresSafeArea()
+            AppTheme.accent
+                .ignoresSafeArea()
 
             VStack(spacing: 24) {
                 Spacer()
 
                 VStack(spacing: 8) {
-                    Image(systemName: "banknote.fill")
-                        .font(.system(size: 48))
-                        .foregroundStyle(.white)
                     Text("Money Laundering")
                         .font(.largeTitle.bold())
                         .foregroundStyle(.white)

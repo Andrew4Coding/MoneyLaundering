@@ -6,7 +6,8 @@
 import SwiftUI
 import SwiftData
 
-/// Sheet for creating a custom category with an emoji logo, name, description, and scope.
+/// Sheet for creating a custom category from a name, description, and scope. The icon is derived
+/// from the name on save rather than being chosen — or previewed — here.
 struct CustomCategoryEditorView: View {
     @Bindable var viewModel: AddTransactionViewModel
 
@@ -16,23 +17,17 @@ struct CustomCategoryEditorView: View {
     var body: some View {
         NavigationStack {
             Form {
-                Section("Icon") {
-                    HStack {
-                        Text(viewModel.newCategoryEmoji.isEmpty ? "🙂" : viewModel.newCategoryEmoji)
-                            .font(.system(size: 40))
-                        TextField("Type an emoji", text: $viewModel.newCategoryEmoji)
-                            .font(.title3)
-                            .onChange(of: viewModel.newCategoryEmoji) { _, newValue in
-                                if let last = newValue.last {
-                                    viewModel.newCategoryEmoji = String(last)
-                                }
-                            }
-                    }
-                }
-
                 Section("Details") {
                     TextField("Name", text: $viewModel.newCategoryName)
                     TextField("Description", text: $viewModel.newCategoryDescription)
+                }
+
+                Section {
+                    iconRow
+                } footer: {
+                    if viewModel.isAppleIntelligenceIconAvailable {
+                        Text("Chosen automatically by Apple Intelligence from the name and description.")
+                    }
                 }
 
                 Section("Applies to") {
@@ -40,19 +35,39 @@ struct CustomCategoryEditorView: View {
                     checkboxRow(title: "Income", isOn: incomeEnabled) { setIncome($0) }
                 }
             }
-            .navigationTitle("New Category")
+            .onChange(of: viewModel.newCategoryName) { viewModel.requestIconSuggestion() }
+            .onChange(of: viewModel.newCategoryDescription) { viewModel.requestIconSuggestion() }
+            .onChange(of: viewModel.newCategoryScope) { viewModel.requestIconSuggestion() }
+            .navigationTitle(viewModel.isEditingCategory ? "Edit Category" : "New Category")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
                     Button("Cancel") { dismiss() }
                 }
                 ToolbarItem(placement: .confirmationAction) {
-                    Button("Add") {
-                        viewModel.createCustomCategory(context: modelContext)
+                    Button(viewModel.isEditingCategory ? "Save" : "Add") {
+                        viewModel.saveCustomCategory(context: modelContext)
                         dismiss()
                     }
                     .disabled(!viewModel.isCustomCategoryValid)
                 }
+            }
+        }
+    }
+
+    private var iconRow: some View {
+        HStack(spacing: 12) {
+            Image(systemName: viewModel.resolvedCategorySymbol)
+                .font(.title3)
+                .foregroundStyle(AppTheme.categoryColor)
+                .frame(width: 32, height: 32)
+                .background(AppTheme.categoryColor.opacity(0.18), in: RoundedRectangle(cornerRadius: 8))
+
+            Text("Icon")
+            Spacer()
+
+            if viewModel.isSuggestingCategoryIcon {
+                ProgressView()
             }
         }
     }

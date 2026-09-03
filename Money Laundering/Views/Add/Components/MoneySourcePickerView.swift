@@ -7,14 +7,16 @@ import SwiftUI
 
 struct MoneySourcePickerView: View {
     @Binding var selection: MoneySource
+    var transactionType: TransactionType = .expense
+
+    private var sources: [MoneySource] {
+        MoneySource.available(for: transactionType)
+    }
 
     var body: some View {
         Picker("Source", selection: $selection) {
-            ForEach(MoneySource.allCases) { source in
-                Text(source.displayName)
-                .tag(
-                    source
-                )
+            ForEach(sources) { source in
+                Text(source.displayName).tag(source)
             }
         }
     }
@@ -23,6 +25,6 @@ struct MoneySourcePickerView: View {
 #Preview {
     @Previewable @State var source: MoneySource = .bca
     Form {
-        MoneySourcePickerView(selection: $source)
+        MoneySourcePickerView(selection: $source, transactionType: .income)
     }
 }
