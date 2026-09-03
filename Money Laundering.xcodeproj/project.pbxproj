@@ -10,6 +10,7 @@
 		10F158F91B0E387BCC79E4B6 /* CameraPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = B42BDF38CDA9FE0A3AD6E91C /* CameraPicker.swift */; };
 		12FEC4F098EC9B2F6CA2D02F /* BillTextRecognizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2830D1E9FCDC0B92A95E5724 /* BillTextRecognizer.swift */; };
 		1C9C959BE2DDF698E347B6A4 /* TransactionDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7985EA5B21A958FE4B758181 /* TransactionDetailView.swift */; };
+		2E4D3B1781AB2FF9EEFAC5F8 /* MoneyLaunderingShortcuts.swift in Sources */ = {isa = PBXBuildFile; fileRef = B98CF8F7831F9C3CD18097AB /* MoneyLaunderingShortcuts.swift */; };
 		2F35E21157FDCCF25BF8869B /* AddTransactionViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 715F58DC4EC623D24912BAC7 /* AddTransactionViewModel.swift */; };
 		354C5D5625D6F58530E86C08 /* TransactionType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 397DB9D8C7AED8313DCEE7AD /* TransactionType.swift */; };
 		3986F36243F4173819103738 /* CategoryPickerListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E86A14BDFC8085CDB1C3DA0 /* CategoryPickerListView.swift */; };
@@ -21,7 +22,6 @@
 		4F70E15831F9A3F61C20BCAD /* TransactionFilterBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70EFCD59977D3643A9374C24 /* TransactionFilterBar.swift */; };
 		505EFF39CCEDD0765122E534 /* TransactionIOService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12EA9B4614EB7E349665D517 /* TransactionIOService.swift */; };
 		56EAE98B8897DD9791DB1A66 /* BillScanner.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE809522BB874F0D689966CA /* BillScanner.swift */; };
-		574A9BCEB7D13A67B5250E50 /* AddTransactionIntent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63F225B1A96C42FB89756A8A /* AddTransactionIntent.swift */; };
 		5BE356F8DD3154817A0C04B1 /* BillsListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6365CB042E9831CD4596CB9A /* BillsListView.swift */; };
 		5C813E2D9C1C11459AA625CF /* ReceiptPickerSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21BF6CF04E9C940E765EF913 /* ReceiptPickerSection.swift */; };
 		6225841202958DDAB88C4C60 /* StatsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FC6A16CC25FE61F75E57A4A /* StatsViewModel.swift */; };
@@ -34,7 +34,7 @@
 		72CC316099109124701EF86F /* Persistance.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21024DE0CC19B273292516D6 /* Persistance.swift */; };
 		74562484948A4648C6F3360A /* TransactionCategory.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF3EEECE10ABADCECFB85B6A /* TransactionCategory.swift */; };
 		7499A77A11F8648D68A67DBD /* Bill.swift in Sources */ = {isa = PBXBuildFile; fileRef = 480F78AE2DD4E383B3496C81 /* Bill.swift */; };
-		765149BD30495C42006CEA8D /* MoneyLaunderingShortcuts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 765149BC30495C42006CEA8D /* MoneyLaunderingShortcuts.swift */; };
+		765149C23049656C006CEA8D /* BillItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 765149C13049656C006CEA8D /* BillItem.swift */; };
 		79D94670A1DED01DFACCF1ED /* RootTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DE09D6EEE6B4DA08127D084 /* RootTabView.swift */; };
 		7B5E3F1ABF2554E15B52E4F0 /* CategoryBadgeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B62E5CAEDB44C0132E2EA8E6 /* CategoryBadgeView.swift */; };
 		7C3B083AE1CE099D77BD21FE /* TransactionsListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 809F48247BDA972054E46097 /* TransactionsListView.swift */; };
@@ -42,6 +42,7 @@
 		7FB710287C0E20F738C7EF11 /* AppLog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50FEA34DC6947348E184D110 /* AppLog.swift */; };
 		8569D8EE76D4177997BB9A61 /* MoneySource.swift in Sources */ = {isa = PBXBuildFile; fileRef = DFFAD29CB0543662926C1B6F /* MoneySource.swift */; };
 		8B2B521A3B51BEEDD8030921 /* TransactionRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 568667DB5302C395B813D934 /* TransactionRowView.swift */; };
+		97EE0CD13704ECCE0EB5DBF6 /* CategoryEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F4ECC1E469061B5D0F0987A /* CategoryEntity.swift */; };
 		98D3FD5A52B49EF0EA0427AD /* TransactionsListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2AB4C6BD581621BB1E8ACA9 /* TransactionsListViewModel.swift */; };
 		A0B96137CFBE3E88EE28E5FD /* SignInView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6608AD7A35D40DE7A0BE896 /* SignInView.swift */; };
 		A829D91416ABA1EA67009AC1 /* CategoryBreakdownChart.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8341D0A362AF28173E997B1 /* CategoryBreakdownChart.swift */; };
@@ -69,6 +70,7 @@
 		EE1DD356E6A970973FF71FF2 /* BillEditorViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C77DB01A196597E58C65A26 /* BillEditorViewModel.swift */; };
 		F5FBBEC82BCFD3FD9957C072 /* AmountCalculatorViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DABBD2082CAFEAC51FA669F6 /* AmountCalculatorViewModel.swift */; };
 		F7B14E1AC9647ED585ABFD84 /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33113952B0851CCA140FF18E /* HomeView.swift */; };
+		F895C87489F1B6279525930C /* AddTransactionIntent.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8DB40E176E0CF056A1ECB4A /* AddTransactionIntent.swift */; };
 		FAB055EEE5F1F6A915703337 /* DateRangeProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E09EB72546461EEDF1E1307 /* DateRangeProvider.swift */; };
 		FBEAD2880C948EB16CBB64D4 /* StatsSectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF8D2DD7581F3E2A79CE5940 /* StatsSectionView.swift */; };
 		FF7D4AE66E0C23DD9B007949 /* BillDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5F34051A815501F3554F117 /* BillDetailView.swift */; };
@@ -79,6 +81,7 @@
 		0DB03B37F5FCD5E086E1F048 /* BillRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BillRowView.swift; sourceTree = "<group>"; };
 		12EA9B4614EB7E349665D517 /* TransactionIOService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionIOService.swift; sourceTree = "<group>"; };
 		13549D89A99835227ED750EE /* TransactionPDFRenderer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionPDFRenderer.swift; sourceTree = "<group>"; };
+		1F4ECC1E469061B5D0F0987A /* CategoryEntity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryEntity.swift; sourceTree = "<group>"; };
 		21024DE0CC19B273292516D6 /* Persistance.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Persistance.swift; sourceTree = "<group>"; };
 		21BF6CF04E9C940E765EF913 /* ReceiptPickerSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReceiptPickerSection.swift; sourceTree = "<group>"; };
 		2830D1E9FCDC0B92A95E5724 /* BillTextRecognizer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BillTextRecognizer.swift; sourceTree = "<group>"; };
@@ -90,7 +93,7 @@
 		38FC342C6D4039FA820B20F0 /* HomeSummaryCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeSummaryCard.swift; sourceTree = "<group>"; };
 		397DB9D8C7AED8313DCEE7AD /* TransactionType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionType.swift; sourceTree = "<group>"; };
 		42001B4E54215083AEC9423D /* TransactionDocument.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionDocument.swift; sourceTree = "<group>"; };
-		4353CD7524551BADEA7723B8 /* Money Laundering.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = "Money Laundering.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		4353CD7524551BADEA7723B8 /* Money Laundering.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Money Laundering.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		480F78AE2DD4E383B3496C81 /* Bill.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Bill.swift; sourceTree = "<group>"; };
 		49BE1950B1E513B702A2917D /* CategoryIconIntelligence.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryIconIntelligence.swift; sourceTree = "<group>"; };
 		50FEA34DC6947348E184D110 /* AppLog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppLog.swift; sourceTree = "<group>"; };
@@ -100,7 +103,6 @@
 		5E09EB72546461EEDF1E1307 /* DateRangeProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateRangeProvider.swift; sourceTree = "<group>"; };
 		5FB50708AAD7C479D2ED6F80 /* AccountView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountView.swift; sourceTree = "<group>"; };
 		6365CB042E9831CD4596CB9A /* BillsListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BillsListView.swift; sourceTree = "<group>"; };
-		63F225B1A96C42FB89756A8A /* AddTransactionIntent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddTransactionIntent.swift; sourceTree = "<group>"; };
 		657F6D9B3A13F38236DB43C1 /* CustomCategoryEditorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomCategoryEditorView.swift; sourceTree = "<group>"; };
 		68598FEC4F4E86EEED4531D7 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		6C77DB01A196597E58C65A26 /* BillEditorViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BillEditorViewModel.swift; sourceTree = "<group>"; };
@@ -108,7 +110,7 @@
 		715F58DC4EC623D24912BAC7 /* AddTransactionViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddTransactionViewModel.swift; sourceTree = "<group>"; };
 		72121F63E0B4B747339EC2F1 /* BillEditorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BillEditorView.swift; sourceTree = "<group>"; };
 		72C8FF11F713FF2F67775CA4 /* SourceBadgeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SourceBadgeView.swift; sourceTree = "<group>"; };
-		765149BC30495C42006CEA8D /* MoneyLaunderingShortcuts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoneyLaunderingShortcuts.swift; sourceTree = "<group>"; };
+		765149C13049656C006CEA8D /* BillItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BillItem.swift; sourceTree = "<group>"; };
 		7985EA5B21A958FE4B758181 /* TransactionDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionDetailView.swift; sourceTree = "<group>"; };
 		7EF712240FA13B442534D6DF /* BillSummaryCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BillSummaryCard.swift; sourceTree = "<group>"; };
 		809F48247BDA972054E46097 /* TransactionsListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionsListView.swift; sourceTree = "<group>"; };
@@ -129,6 +131,7 @@
 		B62E5CAEDB44C0132E2EA8E6 /* CategoryBadgeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryBadgeView.swift; sourceTree = "<group>"; };
 		B6D087803E3376A62F0BFDD1 /* EmptyStateView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmptyStateView.swift; sourceTree = "<group>"; };
 		B921AABE1C9D6307562AF7CB /* StatBucket.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatBucket.swift; sourceTree = "<group>"; };
+		B98CF8F7831F9C3CD18097AB /* MoneyLaunderingShortcuts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoneyLaunderingShortcuts.swift; sourceTree = "<group>"; };
 		BD8B50C64706BEFA56F43FB3 /* BillParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BillParser.swift; sourceTree = "<group>"; };
 		BE809522BB874F0D689966CA /* BillScanner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BillScanner.swift; sourceTree = "<group>"; };
 		CBE946951C3357592C5F0255 /* AppTheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppTheme.swift; sourceTree = "<group>"; };
@@ -139,6 +142,7 @@
 		D8341D0A362AF28173E997B1 /* CategoryBreakdownChart.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryBreakdownChart.swift; sourceTree = "<group>"; };
 		DABBD2082CAFEAC51FA669F6 /* AmountCalculatorViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AmountCalculatorViewModel.swift; sourceTree = "<group>"; };
 		DFFAD29CB0543662926C1B6F /* MoneySource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoneySource.swift; sourceTree = "<group>"; };
+		E8DB40E176E0CF056A1ECB4A /* AddTransactionIntent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddTransactionIntent.swift; sourceTree = "<group>"; };
 		EC74E960161655EBBE3CE64A /* Money_LaunderingApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Money_LaunderingApp.swift; sourceTree = "<group>"; };
 		F2D6BCCFE2B50A625E6D98AA /* BillMath.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BillMath.swift; sourceTree = "<group>"; };
 		F3886A28EADE02E650D85238 /* MoneySourcePickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoneySourcePickerView.swift; sourceTree = "<group>"; };
@@ -167,6 +171,14 @@
 				857A151E837768C65C54B934 /* CategorySymbolResolver.swift */,
 			);
 			path = Category;
+			sourceTree = "<group>";
+		};
+		0876C7C2957324F679F1EB1F /* Intents */ = {
+			isa = PBXGroup;
+			children = (
+				E8DB40E176E0CF056A1ECB4A /* AddTransactionIntent.swift */,
+			);
+			path = Intents;
 			sourceTree = "<group>";
 		};
 		0AF74BF57D6290FFD26A1D54 /* Transactions */ = {
@@ -210,6 +222,7 @@
 				5133C76B4CE152B160275D9B /* Transaction.swift */,
 				CF3EEECE10ABADCECFB85B6A /* TransactionCategory.swift */,
 				397DB9D8C7AED8313DCEE7AD /* TransactionType.swift */,
+				765149C13049656C006CEA8D /* BillItem.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -242,14 +255,6 @@
 				7D6F01C7B69C3127E9A3B524 /* Components */,
 			);
 			path = Bills;
-			sourceTree = "<group>";
-		};
-		43FCE9A967B263D4735DB825 /* AddTransactionIntent */ = {
-			isa = PBXGroup;
-			children = (
-				63F225B1A96C42FB89756A8A /* AddTransactionIntent.swift */,
-			);
-			path = AddTransactionIntent;
 			sourceTree = "<group>";
 		};
 		46F924181B8EEEC5BA4FD1BE /* Services */ = {
@@ -300,6 +305,14 @@
 				B1028F052D39E9B3452DCD03 /* Views */,
 			);
 			path = "Money Laundering";
+			sourceTree = "<group>";
+		};
+		765149C03049643D006CEA8D /* Query */ = {
+			isa = PBXGroup;
+			children = (
+				1F4ECC1E469061B5D0F0987A /* CategoryEntity.swift */,
+			);
+			path = Query;
 			sourceTree = "<group>";
 		};
 		7D6F01C7B69C3127E9A3B524 /* Components */ = {
@@ -395,8 +408,9 @@
 		D55BDC48D3098A5D22BC67CC /* AppIntents */ = {
 			isa = PBXGroup;
 			children = (
-				43FCE9A967B263D4735DB825 /* AddTransactionIntent */,
-				765149BC30495C42006CEA8D /* MoneyLaunderingShortcuts.swift */,
+				765149C03049643D006CEA8D /* Query */,
+				B98CF8F7831F9C3CD18097AB /* MoneyLaunderingShortcuts.swift */,
+				0876C7C2957324F679F1EB1F /* Intents */,
 			);
 			path = AppIntents;
 			sourceTree = "<group>";
@@ -446,7 +460,7 @@
 			isa = PBXProject;
 			attributes = {
 				BuildIndependentTargetsInParallel = YES;
-				LastUpgradeCheck = 1430;
+				LastUpgradeCheck = 2660;
 				TargetAttributes = {
 					614B973E32F1676C5261D6C1 = {
 						DevelopmentTeam = 92QV2QPDKA;
@@ -490,7 +504,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				C1B8CB85F4121610E2B3117C /* AccountView.swift in Sources */,
-				574A9BCEB7D13A67B5250E50 /* AddTransactionIntent.swift in Sources */,
+				F895C87489F1B6279525930C /* AddTransactionIntent.swift in Sources */,
 				7ED55EA4A06E81BAFC2D0AD9 /* AddTransactionView.swift in Sources */,
 				2F35E21157FDCCF25BF8869B /* AddTransactionViewModel.swift in Sources */,
 				3E75A55EF8AF9E4F2BD8740F /* AmountCalculatorView.swift in Sources */,
@@ -513,8 +527,8 @@
 				10F158F91B0E387BCC79E4B6 /* CameraPicker.swift in Sources */,
 				7B5E3F1ABF2554E15B52E4F0 /* CategoryBadgeView.swift in Sources */,
 				A829D91416ABA1EA67009AC1 /* CategoryBreakdownChart.swift in Sources */,
+				97EE0CD13704ECCE0EB5DBF6 /* CategoryEntity.swift in Sources */,
 				72394835533F1242BA328FAC /* CategoryIconIntelligence.swift in Sources */,
-				765149BD30495C42006CEA8D /* MoneyLaunderingShortcuts.swift in Sources */,
 				3986F36243F4173819103738 /* CategoryPickerListView.swift in Sources */,
 				AEBAF0EA5B50C436F94C76E0 /* CategorySeeder.swift in Sources */,
 				B4AA9E34D2EBBAF63D3C1043 /* CategorySymbolResolver.swift in Sources */,
@@ -526,6 +540,7 @@
 				4CD89C4C7450C4E90802A992 /* HomeSummaryCard.swift in Sources */,
 				F7B14E1AC9647ED585ABFD84 /* HomeView.swift in Sources */,
 				E4288FB4FF1367B07383878B /* HomeViewModel.swift in Sources */,
+				2E4D3B1781AB2FF9EEFAC5F8 /* MoneyLaunderingShortcuts.swift in Sources */,
 				8569D8EE76D4177997BB9A61 /* MoneySource.swift in Sources */,
 				6E3B589CF9DA867296B831ED /* MoneySourcePickerView.swift in Sources */,
 				DBF04A82AFDD0B502FD3A62D /* Money_LaunderingApp.swift in Sources */,
@@ -545,6 +560,7 @@
 				74562484948A4648C6F3360A /* TransactionCategory.swift in Sources */,
 				1C9C959BE2DDF698E347B6A4 /* TransactionDetailView.swift in Sources */,
 				E5930CAB0825ABB37AB35B80 /* TransactionDocument.swift in Sources */,
+				765149C23049656C006CEA8D /* BillItem.swift in Sources */,
 				ADD50972452AE3C65FE91EFD /* TransactionExportFormat.swift in Sources */,
 				4F70E15831F9A3F61C20BCAD /* TransactionFilterBar.swift in Sources */,
 				505EFF39CCEDD0765122E534 /* TransactionIOService.swift in Sources */,
@@ -692,6 +708,7 @@
 				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
@@ -752,6 +769,7 @@
 				MTL_FAST_MATH = YES;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_COMPILATION_MODE = wholemodule;
 				SWIFT_OPTIMIZATION_LEVEL = "-O";
 				SWIFT_VERSION = 5.0;

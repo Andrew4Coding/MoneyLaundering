@@ -12,16 +12,7 @@ import SwiftUI
 struct Money_LaunderingApp: App {
     @State private var authService = AuthenticationService()
 
-    let container: ModelContainer = {
-        let schema = Schema([Transaction.self, TransactionCategory.self, Bill.self, BillItem.self])
-        let configuration = ModelConfiguration(
-            schema: schema,
-            cloudKitDatabase: .private("iCloud.com.andrew4coding.moneylaundering.Money-Laundering")
-        )
-        let container = try! ModelContainer(for: schema, configurations: [configuration])
-        CategorySeeder.seedIfNeeded(context: container.mainContext)
-        return container
-    }()
+    private let container = Persistance.container
 
     var body: some Scene {
         WindowGroup {

@@ -3,9 +3,10 @@
 //  Money Laundering
 //
 
+import AppIntents
 import Foundation
 
-enum MoneySource: String, Codable, CaseIterable, Identifiable {
+enum MoneySource: String, Codable, CaseIterable, Identifiable, AppEnum {
     case grab
     case gopay
     case bca
@@ -70,5 +71,18 @@ enum MoneySource: String, Codable, CaseIterable, Identifiable {
 
     static func available(for type: TransactionType) -> [MoneySource] {
         allCases.filter { $0.scope.allows(type) }
+    }
+
+    static var typeDisplayRepresentation: TypeDisplayRepresentation {
+        "Money Source"
+    }
+
+    static var caseDisplayRepresentations: [MoneySource: DisplayRepresentation] {
+        [.grab: "Grab",
+         .gopay: "GoPay",
+         .bca: "BCA",
+         .bni: "BNI",
+         .ovo: "OVO",
+         .qris: "QRIS"]
     }
 }

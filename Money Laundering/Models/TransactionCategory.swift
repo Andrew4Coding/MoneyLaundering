@@ -8,7 +8,6 @@ import SwiftData
 
 enum CategoryIconType: String, Codable {
     case system
-    case emoji
 }
 
 enum CategoryScope: String, Codable, CaseIterable, Identifiable {
