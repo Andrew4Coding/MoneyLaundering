@@ -9,7 +9,9 @@ enum TransactionExportFormat: String, CaseIterable, Identifiable {
     case csv
     case json
 
-    var id: String { rawValue }
+    var id: String {
+        rawValue
+    }
 
     var displayName: String {
         switch self {

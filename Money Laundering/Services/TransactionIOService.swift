@@ -63,7 +63,7 @@ enum TransactionIOService {
                 record.source,
                 isoFormatter.string(from: record.date),
                 record.description,
-                record.category ?? ""
+                record.category ?? "",
             ]
             lines.append(fields.map { escapeCSVField($0) }.joined(separator: ","))
         }

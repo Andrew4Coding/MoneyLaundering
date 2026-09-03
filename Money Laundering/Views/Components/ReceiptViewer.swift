@@ -26,7 +26,9 @@ struct ReceiptViewer: View {
                             MagnifyGesture()
                                 .onChanged { scale = max(1, min(5, $0.magnification)) }
                                 .onEnded { _ in
-                                    if scale < 1.05 { withAnimation { scale = 1 } }
+                                    if scale < 1.05 {
+                                        withAnimation { scale = 1 }
+                                    }
                                 }
                         )
                 } else {

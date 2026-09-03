@@ -14,10 +14,10 @@ struct DateRangePickerSheet: View {
     @State private var end: Date
 
     init(range: Binding<ClosedRange<Date>?>) {
-        self._range = range
+        _range = range
         let now = Date.now
-        self._start = State(initialValue: range.wrappedValue?.lowerBound ?? now)
-        self._end = State(initialValue: range.wrappedValue?.upperBound ?? now)
+        _start = State(initialValue: range.wrappedValue?.lowerBound ?? now)
+        _end = State(initialValue: range.wrappedValue?.upperBound ?? now)
     }
 
     var body: some View {
@@ -36,7 +36,7 @@ struct DateRangePickerSheet: View {
                     Button("Apply") {
                         let calendar = Calendar.current
                         let clampedEnd = calendar.date(byAdding: .day, value: 1, to: calendar.startOfDay(for: end))!.addingTimeInterval(-1)
-                        range = min(start, end)...max(clampedEnd, start)
+                        range = min(start, end) ... max(clampedEnd, start)
                         dismiss()
                     }
                 }

@@ -78,4 +78,3 @@ enum CategorySeeder {
         Definition(name: "Other", symbolName: "questionmark.circle.fill", description: "Anything that doesn't fit elsewhere", scope: .both),
     ]
 }
-

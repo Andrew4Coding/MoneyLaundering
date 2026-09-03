@@ -4,8 +4,8 @@
 //
 
 import PhotosUI
-import SwiftUI
 import SwiftData
+import SwiftUI
 
 struct AddTransactionView: View {
     @Environment(\.dismiss) private var dismiss
@@ -55,7 +55,7 @@ struct AddTransactionView: View {
                 Section("Details") {
                     TextField("Title", text: $viewModel.title)
                     TextField("Description", text: $viewModel.descriptionText, axis: .vertical)
-                        .lineLimit(2...4)
+                        .lineLimit(2 ... 4)
                 }
 
                 Section("Category") {
@@ -121,7 +121,8 @@ struct AddTransactionView: View {
                 guard let newValue else { return }
                 Task {
                     if let data = try? await newValue.loadTransferable(type: Data.self),
-                       let image = UIImage(data: data) {
+                       let image = UIImage(data: data)
+                    {
                         viewModel.receiptImageData = ReceiptImage.compressedData(from: image)
                     }
                 }
@@ -131,7 +132,9 @@ struct AddTransactionView: View {
             }
             .fullScreenCover(isPresented: $isPresentingCamera) {
                 CameraPicker { data in
-                    if let data { viewModel.receiptImageData = data }
+                    if let data {
+                        viewModel.receiptImageData = data
+                    }
                     isPresentingCamera = false
                 }
                 .ignoresSafeArea()

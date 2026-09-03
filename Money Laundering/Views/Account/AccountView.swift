@@ -11,7 +11,7 @@ struct AccountView: View {
     var body: some View {
         NavigationStack {
             List {
-                if case .signedIn(let userID, let displayName) = authService.state {
+                if case let .signedIn(userID, displayName) = authService.state {
                     Section("Signed in with Apple") {
                         if let displayName, !displayName.isEmpty {
                             LabeledContent("Name", value: displayName)

@@ -16,7 +16,9 @@ enum CategoryScope: String, Codable, CaseIterable, Identifiable {
     case income
     case both
 
-    var id: String { rawValue }
+    var id: String {
+        rawValue
+    }
 
     var displayName: String {
         switch self {
@@ -73,10 +75,10 @@ final class TransactionCategory {
         createdAt: Date = .now
     ) {
         self.name = name
-        self.iconTypeRaw = iconType.rawValue
+        iconTypeRaw = iconType.rawValue
         self.iconValue = iconValue
         self.categoryDescription = categoryDescription
-        self.appliesToRaw = appliesTo.rawValue
+        appliesToRaw = appliesTo.rawValue
         self.isDefault = isDefault
         self.isPinned = isPinned
         self.createdAt = createdAt

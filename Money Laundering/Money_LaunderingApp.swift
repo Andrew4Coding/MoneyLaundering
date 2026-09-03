@@ -5,8 +5,8 @@
 //  Created by Andrew Devito Aryo on 01/07/26.
 //
 
-import SwiftUI
 import SwiftData
+import SwiftUI
 
 @main
 struct Money_LaunderingApp: App {

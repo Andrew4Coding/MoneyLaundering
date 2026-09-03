@@ -3,9 +3,9 @@
 //  Money Laundering
 //
 
-import SwiftUI
-import SwiftData
 import Charts
+import SwiftData
+import SwiftUI
 
 /// Donut chart breaking down expenses by category for the currently selected Home period,
 /// with a legend showing each category's percentage share.
@@ -13,7 +13,7 @@ struct CategoryBreakdownChart: View {
     let slices: [CategorySlice]
 
     private static let palette: [Color] = [
-        .blue, .green, .orange, .purple, .pink, .teal, .red, .indigo, .brown, .mint
+        .blue, .green, .orange, .purple, .pink, .teal, .red, .indigo, .brown, .mint,
     ]
 
     private func color(for index: Int) -> Color {
@@ -73,7 +73,7 @@ struct CategoryBreakdownChart: View {
 #Preview {
     CategoryBreakdownChart(slices: [
         CategorySlice(name: "Food", amount: 120_000, fraction: 0.6, icon: nil),
-        CategorySlice(name: "Transport", amount: 80_000, fraction: 0.4, icon: nil)
+        CategorySlice(name: "Transport", amount: 80000, fraction: 0.4, icon: nil),
     ])
     .padding()
 }

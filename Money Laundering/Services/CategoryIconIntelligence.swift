@@ -11,7 +11,6 @@ import FoundationModels
 /// set, so it can never return an invalid symbol name. Falls back to `CategorySymbolResolver`
 /// (keyword matching) whenever the model is unavailable or errors.
 enum CategoryIconIntelligence {
-
     /// The closed set of icons the model is allowed to choose from. `@Generable` turns each
     /// case into an allowed output value for guided generation.
     @Generable
@@ -68,16 +67,16 @@ enum CategoryIconIntelligence {
         guard SystemLanguageModel.default.availability == .available else { return fallback }
 
         let session = LanguageModelSession(instructions: """
-            You choose the single icon that best represents a personal-finance category, \
-            given its name and short description. Consider what the user most likely spends \
-            money on or receives money for. Answer with one icon only.
-            """)
+        You choose the single icon that best represents a personal-finance category, \
+        given its name and short description. Consider what the user most likely spends \
+        money on or receives money for. Answer with one icon only.
+        """)
 
         let prompt = """
-            Category name: \(name)
-            Description: \(description.isEmpty ? "(none)" : description)
-            Applies to: \(scope.displayName)
-            """
+        Category name: \(name)
+        Description: \(description.isEmpty ? "(none)" : description)
+        Applies to: \(scope.displayName)
+        """
 
         do {
             let response = try await session.respond(to: prompt, generating: Icon.self)

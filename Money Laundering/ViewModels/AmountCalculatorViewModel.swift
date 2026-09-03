@@ -17,7 +17,9 @@ final class AmountCalculatorViewModel {
         case multiply = "×"
         case divide = "÷"
 
-        var id: String { rawValue }
+        var id: String {
+            rawValue
+        }
 
         func apply(_ lhs: Decimal, _ rhs: Decimal) -> Decimal {
             switch self {

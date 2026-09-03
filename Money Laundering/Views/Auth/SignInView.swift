@@ -34,9 +34,9 @@ struct SignInView: View {
                     request.requestedScopes = [.fullName]
                 } onCompletion: { result in
                     switch result {
-                    case .success(let authorization):
+                    case let .success(authorization):
                         authService.handleAuthorization(authorization)
-                    case .failure(let error):
+                    case let .failure(error):
                         print("Sign in with Apple failed: \(error.localizedDescription)")
                     }
                 }

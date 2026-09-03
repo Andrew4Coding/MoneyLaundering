@@ -12,7 +12,9 @@ struct CategorySlice: Identifiable {
     var fraction: Double
     var icon: TransactionCategory?
 
-    var id: String { name }
+    var id: String {
+        name
+    }
 }
 
 @Observable

@@ -3,8 +3,8 @@
 //  Money Laundering
 //
 
-import SwiftUI
 import SwiftData
+import SwiftUI
 
 /// Full-page category picker, pushed from the Add/Edit Transaction form. Categories are
 /// grouped into a "Pinned" section (if any are pinned) and an "All Categories" section.
@@ -103,7 +103,7 @@ struct CategoryPickerListView: View {
         CategoryPickerListView(
             categories: [
                 TransactionCategory(name: "Food", iconType: .system, iconValue: "fork.knife", isDefault: true, isPinned: true),
-                TransactionCategory(name: "Transport", iconType: .system, iconValue: "car.fill", isDefault: true)
+                TransactionCategory(name: "Transport", iconType: .system, iconValue: "car.fill", isDefault: true),
             ],
             selection: .constant(nil),
             onCreateNew: {},

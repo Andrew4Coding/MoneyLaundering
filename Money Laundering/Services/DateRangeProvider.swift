@@ -13,7 +13,9 @@ enum PeriodOption: String, CaseIterable, Identifiable {
     case all
     case custom
 
-    var id: String { rawValue }
+    var id: String {
+        rawValue
+    }
 
     var displayName: String {
         switch self {
@@ -33,7 +35,9 @@ enum StatsPeriod: String, CaseIterable, Identifiable {
     case month
     case custom
 
-    var id: String { rawValue }
+    var id: String {
+        rawValue
+    }
 
     var displayName: String {
         switch self {
@@ -53,13 +57,13 @@ enum DateRangeProvider {
         case .today:
             let start = calendar.startOfDay(for: now)
             let end = calendar.date(byAdding: .day, value: 1, to: start)!.addingTimeInterval(-1)
-            return start...end
+            return start ... end
         case .thisWeek:
             guard let interval = calendar.dateInterval(of: .weekOfYear, for: now) else { return nil }
-            return interval.start...interval.end.addingTimeInterval(-1)
+            return interval.start ... interval.end.addingTimeInterval(-1)
         case .thisMonth:
             guard let interval = calendar.dateInterval(of: .month, for: now) else { return nil }
-            return interval.start...interval.end.addingTimeInterval(-1)
+            return interval.start ... interval.end.addingTimeInterval(-1)
         case .all:
             return nil
         case .custom:
@@ -74,15 +78,15 @@ enum DateRangeProvider {
         case .day:
             let start = calendar.date(byAdding: .day, value: -6, to: calendar.startOfDay(for: now))!
             let end = calendar.date(byAdding: .day, value: 1, to: calendar.startOfDay(for: now))!.addingTimeInterval(-1)
-            return start...end
+            return start ... end
         case .week:
             let interval = calendar.dateInterval(of: .weekOfYear, for: now)!
-            return interval.start...interval.end.addingTimeInterval(-1)
+            return interval.start ... interval.end.addingTimeInterval(-1)
         case .month:
             let interval = calendar.dateInterval(of: .month, for: now)!
-            return interval.start...interval.end.addingTimeInterval(-1)
+            return interval.start ... interval.end.addingTimeInterval(-1)
         case .custom:
-            return customRange ?? (calendar.startOfDay(for: now)...now)
+            return customRange ?? (calendar.startOfDay(for: now) ... now)
         }
     }
 }

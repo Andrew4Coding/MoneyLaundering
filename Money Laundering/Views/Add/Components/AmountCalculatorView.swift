@@ -18,14 +18,16 @@ struct AmountCalculatorView: View {
         case op(AmountCalculatorViewModel.Operator)
         case backspace
 
-        var id: Self { self }
+        var id: Self {
+            self
+        }
     }
 
     private let rows: [[Key]] = [
         [.digit("7"), .digit("8"), .digit("9"), .op(.divide)],
         [.digit("4"), .digit("5"), .digit("6"), .op(.multiply)],
         [.digit("1"), .digit("2"), .digit("3"), .op(.subtract)],
-        [.digit("0"), .digit("000"), .backspace, .op(.add)]
+        [.digit("0"), .digit("000"), .backspace, .op(.add)],
     ]
 
     init(amountText: Binding<String>) {
@@ -108,7 +110,6 @@ struct AmountCalculatorView: View {
         .padding(.bottom, 16)
     }
 
-    @ViewBuilder
     private func keyButton(for key: Key) -> some View {
         Button {
             tap(key)
@@ -124,9 +125,9 @@ struct AmountCalculatorView: View {
     @ViewBuilder
     private func keyLabel(for key: Key) -> some View {
         switch key {
-        case .digit(let value):
+        case let .digit(value):
             Text(value).font(.title2.weight(.medium))
-        case .op(let op):
+        case let .op(op):
             Text(op.rawValue).font(.title2.weight(.semibold))
         case .backspace:
             Image(systemName: "delete.left").font(.title3.weight(.medium))
@@ -142,8 +143,8 @@ struct AmountCalculatorView: View {
 
     private func tap(_ key: Key) {
         switch key {
-        case .digit(let value): viewModel.inputDigit(value)
-        case .op(let op): viewModel.inputOperator(op)
+        case let .digit(value): viewModel.inputDigit(value)
+        case let .op(op): viewModel.inputOperator(op)
         case .backspace: viewModel.backspace()
         }
     }

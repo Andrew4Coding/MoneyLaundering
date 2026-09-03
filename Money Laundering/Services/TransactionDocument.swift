@@ -10,8 +10,13 @@ import UniformTypeIdentifiers
 /// from disk via `.fileExporter`/`.fileImporter`. It doesn't know CSV from JSON itself — the
 /// caller picks the `contentType` to hand `.fileExporter` alongside this document.
 struct TransactionDocument: FileDocument {
-    static var readableContentTypes: [UTType] { [.commaSeparatedText, .json] }
-    static var writableContentTypes: [UTType] { [.commaSeparatedText, .json] }
+    static var readableContentTypes: [UTType] {
+        [.commaSeparatedText, .json, .pdf]
+    }
+
+    static var writableContentTypes: [UTType] {
+        [.commaSeparatedText, .json, .pdf]
+    }
 
     var data: Data
 
@@ -26,7 +31,7 @@ struct TransactionDocument: FileDocument {
         self.data = data
     }
 
-    func fileWrapper(configuration: WriteConfiguration) throws -> FileWrapper {
+    func fileWrapper(configuration _: WriteConfiguration) throws -> FileWrapper {
         FileWrapper(regularFileWithContents: data)
     }
 }

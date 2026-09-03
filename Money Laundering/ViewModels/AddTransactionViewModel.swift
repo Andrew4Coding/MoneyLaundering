@@ -4,8 +4,8 @@
 //
 
 import Foundation
-import SwiftData
 import Observation
+import SwiftData
 
 @Observable
 final class AddTransactionViewModel {
@@ -27,7 +27,9 @@ final class AddTransactionViewModel {
     /// creating a new one.
     private(set) var editingCategory: TransactionCategory?
 
-    var isEditingCategory: Bool { editingCategory != nil }
+    var isEditingCategory: Bool {
+        editingCategory != nil
+    }
 
     /// Icon chosen by Apple Intelligence for the current name/description, when available.
     var aiSuggestedSymbol: String?
@@ -85,7 +87,9 @@ final class AddTransactionViewModel {
     /// Non-nil when this view model is editing an existing transaction rather than creating a new one.
     private(set) var editingTransaction: Transaction?
 
-    var isEditing: Bool { editingTransaction != nil }
+    var isEditing: Bool {
+        editingTransaction != nil
+    }
 
     init() {}
 

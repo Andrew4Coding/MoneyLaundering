@@ -3,8 +3,8 @@
 //  Money Laundering
 //
 
-import SwiftUI
 import SwiftData
+import SwiftUI
 
 /// 2-tab shell (Home, Transactions). The "Add" action is exposed as a bottom-bar toolbar
 /// button inside each tab's navigation stack so the system manages its placement alongside

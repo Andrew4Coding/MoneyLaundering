@@ -31,8 +31,8 @@ enum CurrencyFormatter {
         switch absValue {
         case 1_000_000...:
             return String(format: "Rp %.1fjt", value / 1_000_000)
-        case 1_000...:
-            return String(format: "Rp %.0frb", value / 1_000)
+        case 1000...:
+            return String(format: "Rp %.0frb", value / 1000)
         default:
             return rupiah(amount)
         }

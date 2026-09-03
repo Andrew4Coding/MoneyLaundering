@@ -3,8 +3,8 @@
 //  Money Laundering
 //
 
-import SwiftUI
 import SwiftData
+import SwiftUI
 
 struct RecentTransactionsSection: View {
     let transactions: [Transaction]

@@ -3,8 +3,8 @@
 //  Money Laundering
 //
 
-import SwiftUI
 import SwiftData
+import SwiftUI
 
 struct TransactionsListView: View {
     @Query(sort: \Transaction.date, order: .reverse) private var allTransactions: [Transaction]
@@ -58,6 +58,9 @@ struct TransactionsListView: View {
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
                     Menu {
+                        Button("PDF") {
+                            viewModel.startPDFExport(transactions: filteredTransactions)
+                        }
                         ForEach(TransactionExportFormat.allCases) { format in
                             Button(format.displayName) {
                                 viewModel.startExport(format: format, transactions: filteredTransactions)
@@ -71,7 +74,7 @@ struct TransactionsListView: View {
             .fileExporter(
                 isPresented: $viewModel.isPresentingExporter,
                 document: viewModel.exportDocument,
-                contentType: viewModel.exportFormat.contentType,
+                contentType: viewModel.exportContentType,
                 defaultFilename: "Transactions"
             ) { result in
                 viewModel.handleExportResult(result)

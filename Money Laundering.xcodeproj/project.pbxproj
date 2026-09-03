@@ -16,6 +16,7 @@
 		3E75A55EF8AF9E4F2BD8740F /* AmountCalculatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90D1B9D0195194E04EEAAF6E /* AmountCalculatorView.swift */; };
 		4092E694518A502B932F57FE /* EmptyStateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6D087803E3376A62F0BFDD1 /* EmptyStateView.swift */; };
 		42B6E6C5DA7732446C5C5DCA /* TransactionExportFormat.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D8564BAA961B403DC8EA38E /* TransactionExportFormat.swift */; };
+		47F5B5A24A2D3FD97EAA9B97 /* TransactionPDFRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = E96D596B74792E735125BCC3 /* TransactionPDFRenderer.swift */; };
 		4BABB82C601DA2AE929BA94A /* CategorySymbolResolver.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE9872F4BA30DC0B2CC365CE /* CategorySymbolResolver.swift */; };
 		4CD89C4C7450C4E90802A992 /* HomeSummaryCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38FC342C6D4039FA820B20F0 /* HomeSummaryCard.swift */; };
 		4F70E15831F9A3F61C20BCAD /* TransactionFilterBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70EFCD59977D3643A9374C24 /* TransactionFilterBar.swift */; };
@@ -105,6 +106,7 @@
 		D8341D0A362AF28173E997B1 /* CategoryBreakdownChart.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryBreakdownChart.swift; sourceTree = "<group>"; };
 		DABBD2082CAFEAC51FA669F6 /* AmountCalculatorViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AmountCalculatorViewModel.swift; sourceTree = "<group>"; };
 		DFFAD29CB0543662926C1B6F /* MoneySource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoneySource.swift; sourceTree = "<group>"; };
+		E96D596B74792E735125BCC3 /* TransactionPDFRenderer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionPDFRenderer.swift; sourceTree = "<group>"; };
 		EC74E960161655EBBE3CE64A /* Money_LaunderingApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Money_LaunderingApp.swift; sourceTree = "<group>"; };
 		EE9872F4BA30DC0B2CC365CE /* CategorySymbolResolver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategorySymbolResolver.swift; sourceTree = "<group>"; };
 		F3886A28EADE02E650D85238 /* MoneySourcePickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoneySourcePickerView.swift; sourceTree = "<group>"; };
@@ -189,6 +191,7 @@
 				0A93F84E620BF4DE7BED64C3 /* TransactionDocument.swift */,
 				2D8564BAA961B403DC8EA38E /* TransactionExportFormat.swift */,
 				38CFAE499D1DC1A14A15A302 /* TransactionIOService.swift */,
+				E96D596B74792E735125BCC3 /* TransactionPDFRenderer.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -425,6 +428,7 @@
 				42B6E6C5DA7732446C5C5DCA /* TransactionExportFormat.swift in Sources */,
 				4F70E15831F9A3F61C20BCAD /* TransactionFilterBar.swift in Sources */,
 				9533E756C1FDD22B73556C67 /* TransactionIOService.swift in Sources */,
+				47F5B5A24A2D3FD97EAA9B97 /* TransactionPDFRenderer.swift in Sources */,
 				8B2B521A3B51BEEDD8030921 /* TransactionRowView.swift in Sources */,
 				354C5D5625D6F58530E86C08 /* TransactionType.swift in Sources */,
 				7C3B083AE1CE099D77BD21FE /* TransactionsListView.swift in Sources */,

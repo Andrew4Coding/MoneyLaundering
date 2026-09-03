@@ -3,9 +3,9 @@
 //  Money Laundering
 //
 
-import SwiftUI
-import SwiftData
 import Charts
+import SwiftData
+import SwiftUI
 
 /// Full statistics section (income/expense bar chart), embedded directly in Home.
 struct StatsSectionView: View {

@@ -3,8 +3,8 @@
 //  Money Laundering
 //
 
-import SwiftUI
 import SwiftData
+import SwiftUI
 
 struct HomeView: View {
     @Query(sort: \Transaction.date, order: .reverse) private var allTransactions: [Transaction]

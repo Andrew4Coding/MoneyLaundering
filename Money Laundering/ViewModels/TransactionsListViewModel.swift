@@ -6,6 +6,7 @@
 import Foundation
 import Observation
 import SwiftData
+import UniformTypeIdentifiers
 
 @Observable
 final class TransactionsListViewModel {
@@ -15,22 +16,43 @@ final class TransactionsListViewModel {
 
     var isPresentingExporter = false
     var exportDocument: TransactionDocument?
-    var exportFormat: TransactionExportFormat = .csv
+    var exportContentType: UTType = .commaSeparatedText
 
     var statusMessage: String?
     var isPresentingStatusAlert = false
 
+    /// Human-readable description of the currently filtered time span, for the PDF header.
+    var timeRangeDescription: String {
+        guard let range = DateRangeProvider.range(for: selectedPeriod, customRange: customRange) else {
+            return "All time"
+        }
+        let formatter = DateFormatter()
+        formatter.dateStyle = .medium
+        let span = "\(formatter.string(from: range.lowerBound)) – \(formatter.string(from: range.upperBound))"
+        return selectedPeriod == .custom ? span : "\(selectedPeriod.displayName) (\(span))"
+    }
+
     func startExport(format: TransactionExportFormat, transactions: [Transaction]) {
-        exportFormat = format
+        exportContentType = format.contentType
         exportDocument = TransactionDocument(data: TransactionIOService.export(transactions, format: format))
+        isPresentingExporter = true
+    }
+
+    func startPDFExport(transactions: [Transaction]) {
+        exportContentType = .pdf
+        exportDocument = TransactionDocument(data: TransactionPDFRenderer.render(
+            transactions: transactions,
+            title: "Transactions",
+            timeRange: timeRangeDescription
+        ))
         isPresentingExporter = true
     }
 
     func handleExportResult(_ result: Result<URL, Error>) {
         switch result {
-        case .success(let url):
+        case let .success(url):
             statusMessage = "Exported to \(url.lastPathComponent)."
-        case .failure(let error):
+        case let .failure(error):
             statusMessage = "Export failed: \(error.localizedDescription)"
         }
         isPresentingStatusAlert = true

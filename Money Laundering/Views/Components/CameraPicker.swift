@@ -24,7 +24,7 @@ struct CameraPicker: UIViewControllerRepresentable {
         return controller
     }
 
-    func updateUIViewController(_ uiViewController: UIImagePickerController, context: Context) {}
+    func updateUIViewController(_: UIImagePickerController, context _: Context) {}
 
     func makeCoordinator() -> Coordinator {
         Coordinator(onFinish: onFinish)
@@ -38,14 +38,14 @@ struct CameraPicker: UIViewControllerRepresentable {
         }
 
         func imagePickerController(
-            _ picker: UIImagePickerController,
+            _: UIImagePickerController,
             didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey: Any]
         ) {
             let image = info[.originalImage] as? UIImage
             onFinish(image.flatMap { ReceiptImage.compressedData(from: $0) })
         }
 
-        func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
+        func imagePickerControllerDidCancel(_: UIImagePickerController) {
             onFinish(nil)
         }
     }

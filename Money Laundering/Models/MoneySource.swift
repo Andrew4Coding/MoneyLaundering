@@ -13,7 +13,9 @@ enum MoneySource: String, Codable, CaseIterable, Identifiable {
     case ovo
     case qris
 
-    var id: String { rawValue }
+    var id: String {
+        rawValue
+    }
 
     var displayName: String {
         switch self {

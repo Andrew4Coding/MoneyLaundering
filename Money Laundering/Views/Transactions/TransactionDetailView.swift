@@ -3,8 +3,8 @@
 //  Money Laundering
 //
 
-import SwiftUI
 import SwiftData
+import SwiftUI
 
 /// Full detail screen for a single transaction, reachable by tapping a row, with edit and delete.
 struct TransactionDetailView: View {

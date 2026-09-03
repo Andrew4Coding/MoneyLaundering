@@ -42,12 +42,12 @@ final class Transaction {
         receiptImageData: Data? = nil,
         createdAt: Date = .now
     ) {
-        self.typeRaw = type.rawValue
+        typeRaw = type.rawValue
         self.title = title
         self.amount = amount
-        self.sourceRaw = source.rawValue
+        sourceRaw = source.rawValue
         self.date = date
-        self.transactionDescription = description
+        transactionDescription = description
         self.category = category
         self.receiptImageData = receiptImageData
         self.createdAt = createdAt

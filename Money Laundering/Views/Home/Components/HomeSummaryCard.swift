@@ -55,6 +55,6 @@ struct HomeSummaryCard: View {
 }
 
 #Preview {
-    HomeSummaryCard(balance: 4_955_000, totalIncome: 5_000_000, totalExpense: 45_000)
+    HomeSummaryCard(balance: 4_955_000, totalIncome: 5_000_000, totalExpense: 45000)
         .padding()
 }

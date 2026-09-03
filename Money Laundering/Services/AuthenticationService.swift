@@ -30,7 +30,7 @@ final class AuthenticationService: NSObject {
         }
         super.init()
 
-        if case .signedIn(let userID, _) = state {
+        if case let .signedIn(userID, _) = state {
             refreshCredentialState(for: userID)
         }
     }
