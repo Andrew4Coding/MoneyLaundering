@@ -40,6 +40,7 @@
 		7B5E3F1ABF2554E15B52E4F0 /* CategoryBadgeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B62E5CAEDB44C0132E2EA8E6 /* CategoryBadgeView.swift */; };
 		7C3B083AE1CE099D77BD21FE /* TransactionsListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 809F48247BDA972054E46097 /* TransactionsListView.swift */; };
 		7ED55EA4A06E81BAFC2D0AD9 /* AddTransactionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DCB18C99AF2F6E6A82EFCE9 /* AddTransactionView.swift */; };
+		7FB710287C0E20F738C7EF11 /* AppLog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50FEA34DC6947348E184D110 /* AppLog.swift */; };
 		8569D8EE76D4177997BB9A61 /* MoneySource.swift in Sources */ = {isa = PBXBuildFile; fileRef = DFFAD29CB0543662926C1B6F /* MoneySource.swift */; };
 		87208A46B6328171097D2F04 /* CategoryIconIntelligence.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF106AEB3E4FED8E36A33417 /* CategoryIconIntelligence.swift */; };
 		8B2B521A3B51BEEDD8030921 /* TransactionRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 568667DB5302C395B813D934 /* TransactionRowView.swift */; };
@@ -87,6 +88,7 @@
 		397DB9D8C7AED8313DCEE7AD /* TransactionType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionType.swift; sourceTree = "<group>"; };
 		4353CD7524551BADEA7723B8 /* Money Laundering.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = "Money Laundering.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		480F78AE2DD4E383B3496C81 /* Bill.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Bill.swift; sourceTree = "<group>"; };
+		50FEA34DC6947348E184D110 /* AppLog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppLog.swift; sourceTree = "<group>"; };
 		5133C76B4CE152B160275D9B /* Transaction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Transaction.swift; sourceTree = "<group>"; };
 		5501FCC08EBA80A590F66C0E /* BillMath.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BillMath.swift; sourceTree = "<group>"; };
 		568667DB5302C395B813D934 /* TransactionRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionRowView.swift; sourceTree = "<group>"; };
@@ -217,6 +219,7 @@
 		46F924181B8EEEC5BA4FD1BE /* Services */ = {
 			isa = PBXGroup;
 			children = (
+				50FEA34DC6947348E184D110 /* AppLog.swift */,
 				D2F6104EEBFE577E1CE8AB18 /* AuthenticationService.swift */,
 				AB6F8A78BCCD979CFAC7C05C /* BillHeuristicParser.swift */,
 				5501FCC08EBA80A590F66C0E /* BillMath.swift */,
@@ -442,6 +445,7 @@
 				2F35E21157FDCCF25BF8869B /* AddTransactionViewModel.swift in Sources */,
 				3E75A55EF8AF9E4F2BD8740F /* AmountCalculatorView.swift in Sources */,
 				F5FBBEC82BCFD3FD9957C072 /* AmountCalculatorViewModel.swift in Sources */,
+				7FB710287C0E20F738C7EF11 /* AppLog.swift in Sources */,
 				CB6B2C8D49E0BAD9F2DBC04D /* AppTheme.swift in Sources */,
 				BBC9C830ED4A0F97568C3545 /* AuthenticationService.swift in Sources */,
 				7499A77A11F8648D68A67DBD /* Bill.swift in Sources */,

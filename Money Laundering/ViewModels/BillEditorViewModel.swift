@@ -5,6 +5,7 @@
 
 import Foundation
 import Observation
+import OSLog
 import SwiftData
 
 /// One editable bill-item row. Amounts are held as digit strings so the text fields stay simple.
@@ -106,8 +107,12 @@ final class BillEditorViewModel {
 
         switch await BillScanner.scan(imageData: imageData) {
         case let .failure(message):
+            AppLog.billScan.error("Bill scan needs a rescan: \(message, privacy: .public)")
             scanState = .failed(message)
         case let .success(parsed, usedAI):
+            if parsed.items.isEmpty {
+                AppLog.billScan.notice("Bill scan produced no items; user must add them or rescan")
+            }
             usedHeuristicScan = !usedAI
             rawText = parsed.rawText
             if merchant.trimmingCharacters(in: .whitespaces).isEmpty {

@@ -5,6 +5,7 @@
 
 import Foundation
 import ImageIO
+import OSLog
 import UIKit
 import Vision
 
@@ -24,6 +25,7 @@ enum BillTextRecognizer {
 
     static func recognize(imageData: Data) async throws -> String {
         guard let uiImage = UIImage(data: imageData), let cgImage = uiImage.cgImage else {
+            AppLog.billScan.error("OCR aborted: image data (\(imageData.count) bytes) is not a decodable image")
             throw RecognizerError.invalidImage
         }
         // `cgImage` drops the orientation flag; pass it through so a photo taken in portrait
@@ -38,13 +40,28 @@ enum BillTextRecognizer {
         request.recognitionLanguages = languages.isEmpty ? [Locale.Language(identifier: "en-US")] : languages
         request.usesLanguageCorrection = !languages.isEmpty
 
-        let observations = try await request.perform(on: cgImage, orientation: orientation)
+        AppLog.billScan.debug(
+            "OCR start: \(cgImage.width)x\(cgImage.height), orientation \(orientation.rawValue), languages \(request.recognitionLanguages.map(\.maximalIdentifier).joined(separator: ","))"
+        )
+
+        let observations: [RecognizedTextObservation]
+        do {
+            observations = try await request.perform(on: cgImage, orientation: orientation)
+        } catch {
+            AppLog.billScan.error("OCR failed — rescan needed: \(error.localizedDescription, privacy: .public)")
+            throw error
+        }
+
         let lines = observations.compactMap { $0.topCandidates(1).first?.string }
         let text = lines.joined(separator: "\n")
 
         guard !text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else {
+            AppLog.billScan.error("OCR found no text in \(observations.count) region(s) — rescan needed")
             throw RecognizerError.noText
         }
+
+        AppLog.billScan.debug("OCR ok: \(lines.count) line(s), \(text.count) char(s)")
+        AppLog.billScan.debug("OCR result:\n\(text, privacy: .public)")
         return text
     }
 }
