@@ -37,6 +37,7 @@
 		765149C23049656C006CEA8D /* BillItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 765149C13049656C006CEA8D /* BillItem.swift */; };
 		765149C43049678A006CEA8D /* ListAllTodayIntent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 765149C33049678A006CEA8D /* ListAllTodayIntent.swift */; };
 		765149C6304967AD006CEA8D /* TransactionEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 765149C5304967AD006CEA8D /* TransactionEntity.swift */; };
+		765149C930497776006CEA8D /* AppIcon.icon in Resources */ = {isa = PBXBuildFile; fileRef = 765149C830497776006CEA8D /* AppIcon.icon */; };
 		79D94670A1DED01DFACCF1ED /* RootTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DE09D6EEE6B4DA08127D084 /* RootTabView.swift */; };
 		7B5E3F1ABF2554E15B52E4F0 /* CategoryBadgeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B62E5CAEDB44C0132E2EA8E6 /* CategoryBadgeView.swift */; };
 		7C3B083AE1CE099D77BD21FE /* TransactionsListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 809F48247BDA972054E46097 /* TransactionsListView.swift */; };
@@ -115,6 +116,7 @@
 		765149C13049656C006CEA8D /* BillItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BillItem.swift; sourceTree = "<group>"; };
 		765149C33049678A006CEA8D /* ListAllTodayIntent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListAllTodayIntent.swift; sourceTree = "<group>"; };
 		765149C5304967AD006CEA8D /* TransactionEntity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionEntity.swift; sourceTree = "<group>"; };
+		765149C830497776006CEA8D /* AppIcon.icon */ = {isa = PBXFileReference; lastKnownFileType = folder.iconcomposer.icon; path = AppIcon.icon; sourceTree = "<group>"; };
 		7985EA5B21A958FE4B758181 /* TransactionDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionDetailView.swift; sourceTree = "<group>"; };
 		7EF712240FA13B442534D6DF /* BillSummaryCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BillSummaryCard.swift; sourceTree = "<group>"; };
 		809F48247BDA972054E46097 /* TransactionsListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionsListView.swift; sourceTree = "<group>"; };
@@ -424,6 +426,7 @@
 		E980DF7395323F09D816FD01 = {
 			isa = PBXGroup;
 			children = (
+				765149C830497776006CEA8D /* AppIcon.icon */,
 				6A52C6B3604E36EE52C66036 /* Money Laundering */,
 				C9241007DA738E477CCF6F40 /* Products */,
 			);
@@ -499,6 +502,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				BE0374C542A68516590FE64E /* Assets.xcassets in Resources */,
+				765149C930497776006CEA8D /* AppIcon.icon in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
