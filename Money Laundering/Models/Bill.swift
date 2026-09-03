@@ -59,7 +59,7 @@ final class Bill {
         self.taxAmount = taxAmount
         self.serviceAmount = serviceAmount
         self.discountAmount = discountAmount
-        self.scanStatusRaw = scanStatus.rawValue
+        scanStatusRaw = scanStatus.rawValue
         self.createdAt = createdAt
     }
 
@@ -73,8 +73,12 @@ final class Bill {
     }
 
     var displayTitle: String {
-        if !merchant.isEmpty { return merchant }
-        if !title.isEmpty { return title }
+        if !merchant.isEmpty {
+            return merchant
+        }
+        if !title.isEmpty {
+            return title
+        }
         return "Bill"
     }
 

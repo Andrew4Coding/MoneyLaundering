@@ -8,7 +8,9 @@ import SwiftUI
 struct BillRowView: View {
     let bill: Bill
 
-    private var itemCount: Int { (bill.items ?? []).count }
+    private var itemCount: Int {
+        (bill.items ?? []).count
+    }
 
     var body: some View {
         HStack(spacing: 12) {

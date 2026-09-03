@@ -103,7 +103,9 @@ struct BillDetailView: View {
                 Spacer()
                 Button(allSelected ? "Deselect All" : "Select All") {
                     let target = !allSelected
-                    for item in bill.sortedItems { item.isSelected = target }
+                    for item in bill.sortedItems {
+                        item.isSelected = target
+                    }
                     try? modelContext.save()
                 }
                 .font(.subheadline)
@@ -157,9 +159,15 @@ struct BillDetailView: View {
     private var chargesSection: some View {
         VStack(spacing: 8) {
             chargeLine("Subtotal", bill.itemsSubtotal)
-            if bill.taxAmount > 0 { chargeLine("Tax", bill.taxAmount) }
-            if bill.serviceAmount > 0 { chargeLine("Service", bill.serviceAmount) }
-            if bill.discountAmount > 0 { chargeLine("Discount", -bill.discountAmount) }
+            if bill.taxAmount > 0 {
+                chargeLine("Tax", bill.taxAmount)
+            }
+            if bill.serviceAmount > 0 {
+                chargeLine("Service", bill.serviceAmount)
+            }
+            if bill.discountAmount > 0 {
+                chargeLine("Discount", -bill.discountAmount)
+            }
             Divider()
             HStack {
                 Text("Bill total").font(.subheadline.weight(.semibold))

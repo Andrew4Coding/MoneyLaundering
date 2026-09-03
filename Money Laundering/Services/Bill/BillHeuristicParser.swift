@@ -47,9 +47,15 @@ enum BillHeuristicParser {
         var charges = useSplit ? split.charges : parseInlineCharges(lines)
         // Fill any charge the chosen layout missed from the other pass.
         let other = useSplit ? parseInlineCharges(lines) : split.charges
-        if charges.tax == 0 { charges.tax = other.tax }
-        if charges.service == 0 { charges.service = other.service }
-        if charges.discount == 0 { charges.discount = other.discount }
+        if charges.tax == 0 {
+            charges.tax = other.tax
+        }
+        if charges.service == 0 {
+            charges.service = other.service
+        }
+        if charges.discount == 0 {
+            charges.discount = other.discount
+        }
 
         AppLog.billScan.debug(
             "Heuristic: \(lines.count) usable line(s), inline \(inlineItems.count) item(s), split \(split.items.count) item(s), using \(useSplit ? "split" : "inline")"
@@ -138,24 +144,42 @@ enum BillHeuristicParser {
     private static func classifyCharge(_ line: String) -> Charge {
         let lower = line.lowercased()
         // Summary rows first so "Total Disc." counts as a total, not another discount.
-        if subtotalKeywords.contains(where: lower.contains) { return .subtotal }
-        if totalKeywords.contains(where: lower.contains) { return .total }
-        if discountKeywords.contains(where: lower.contains) { return .discount }
-        if taxKeywords.contains(where: lower.contains) { return .tax }
-        if serviceKeywords.contains(where: lower.contains) { return .service }
+        if subtotalKeywords.contains(where: lower.contains) {
+            return .subtotal
+        }
+        if totalKeywords.contains(where: lower.contains) {
+            return .total
+        }
+        if discountKeywords.contains(where: lower.contains) {
+            return .discount
+        }
+        if taxKeywords.contains(where: lower.contains) {
+            return .tax
+        }
+        if serviceKeywords.contains(where: lower.contains) {
+            return .service
+        }
         return .none
     }
 
     private static func isJunk(_ line: String) -> Bool {
         let lower = line.lowercased()
-        if junkKeywords.contains(where: lower.contains) { return true }
-        if line.range(of: #"\d{1,2}:\d{2}"#, options: .regularExpression) != nil { return true }
+        if junkKeywords.contains(where: lower.contains) {
+            return true
+        }
+        if line.range(of: #"\d{1,2}:\d{2}"#, options: .regularExpression) != nil {
+            return true
+        }
         if line.range(
             of: #"(?i)\b(jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)\b"#,
             options: .regularExpression
-        ) != nil { return true }
+        ) != nil {
+            return true
+        }
         // Phone numbers, e.g. "0813 14830545" or "081314830545".
-        if line.range(of: #"0\d{2,3}[\s-]?\d{6,}"#, options: .regularExpression) != nil { return true }
+        if line.range(of: #"0\d{2,3}[\s-]?\d{6,}"#, options: .regularExpression) != nil {
+            return true
+        }
         return false
     }
 
@@ -226,7 +250,8 @@ enum BillHeuristicParser {
         for line in lines.prefix(5)
             where line.rangeOfCharacter(from: .decimalDigits) == nil
             && classifyCharge(line) == .none
-            && line.unicodeScalars.filter(CharacterSet.letters.contains).count >= 3 {
+            && line.unicodeScalars.filter(CharacterSet.letters.contains).count >= 3
+        {
             return line
         }
         return ""

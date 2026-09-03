@@ -65,8 +65,8 @@ struct BillSummaryCard: View {
 
 #Preview {
     BillSummaryCard(totals: BillMath.totals(
-        lineItems: [(50_000, true), (30_000, false), (20_000, true)],
-        tax: 10_000, service: 5_000, discount: 0
+        lineItems: [(50000, true), (30000, false), (20000, true)],
+        tax: 10000, service: 5000, discount: 0
     ))
     .padding()
 }

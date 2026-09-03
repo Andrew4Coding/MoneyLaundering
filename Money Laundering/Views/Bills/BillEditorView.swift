@@ -49,7 +49,9 @@ struct BillEditorView: View {
                 }
                 ToolbarItem(placement: .confirmationAction) {
                     Button("Save") {
-                        if viewModel.save(context: modelContext) { dismiss() }
+                        if viewModel.save(context: modelContext) {
+                            dismiss()
+                        }
                     }
                     .disabled(!viewModel.isValid)
                 }
@@ -88,7 +90,6 @@ struct BillEditorView: View {
         await viewModel.runScan()
     }
 
-    @ViewBuilder
     private var imageSection: some View {
         Section("Bill Photo") {
             if let data = viewModel.imageData, let image = UIImage(data: data) {

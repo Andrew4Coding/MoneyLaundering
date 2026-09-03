@@ -16,7 +16,9 @@ struct DraftBillItem: Identifiable {
     var amountText: String = ""
     var isSelected: Bool = false
 
-    var amount: Decimal { CurrencyFormatter.parse(amountText) ?? 0 }
+    var amount: Decimal {
+        CurrencyFormatter.parse(amountText) ?? 0
+    }
 }
 
 @Observable
@@ -46,7 +48,9 @@ final class BillEditorViewModel {
     private(set) var editingBill: Bill?
     private var rawText: String = ""
 
-    var isEditing: Bool { editingBill != nil }
+    var isEditing: Bool {
+        editingBill != nil
+    }
 
     init() {}
 
@@ -70,11 +74,21 @@ final class BillEditorViewModel {
         }
     }
 
-    var tax: Decimal { CurrencyFormatter.parse(taxText) ?? 0 }
-    var service: Decimal { CurrencyFormatter.parse(serviceText) ?? 0 }
-    var discount: Decimal { CurrencyFormatter.parse(discountText) ?? 0 }
+    var tax: Decimal {
+        CurrencyFormatter.parse(taxText) ?? 0
+    }
 
-    var canScan: Bool { imageData != nil }
+    var service: Decimal {
+        CurrencyFormatter.parse(serviceText) ?? 0
+    }
+
+    var discount: Decimal {
+        CurrencyFormatter.parse(discountText) ?? 0
+    }
+
+    var canScan: Bool {
+        imageData != nil
+    }
 
     var totals: BillTotals {
         BillMath.totals(
@@ -128,9 +142,15 @@ final class BillEditorViewModel {
                     )
                 }
             }
-            if taxText.isEmpty { taxText = CurrencyFormatter.plainAmount(parsed.tax) }
-            if serviceText.isEmpty { serviceText = CurrencyFormatter.plainAmount(parsed.service) }
-            if discountText.isEmpty { discountText = CurrencyFormatter.plainAmount(parsed.discount) }
+            if taxText.isEmpty {
+                taxText = CurrencyFormatter.plainAmount(parsed.tax)
+            }
+            if serviceText.isEmpty {
+                serviceText = CurrencyFormatter.plainAmount(parsed.service)
+            }
+            if discountText.isEmpty {
+                discountText = CurrencyFormatter.plainAmount(parsed.discount)
+            }
             scanState = .done
         }
     }
@@ -153,9 +173,13 @@ final class BillEditorViewModel {
         case .done:
             bill.scanStatus = .scanned
         case .failed:
-            if bill.scanStatus != .scanned { bill.scanStatus = .failed }
+            if bill.scanStatus != .scanned {
+                bill.scanStatus = .failed
+            }
         case .idle, .scanning:
-            if editingBill == nil { bill.scanStatus = .manual }
+            if editingBill == nil {
+                bill.scanStatus = .manual
+            }
         }
 
         if editingBill == nil {
