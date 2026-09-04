@@ -16,8 +16,8 @@ struct AddTransactionIntent: AppIntent {
 
     @Parameter(title: "Amount") var amount: Double
     @Parameter(title: "Title") var name: String
-    @Parameter(title: "Type") var type: TransactionType
-    @Parameter(title: "Source") var source: MoneySource
+    @Parameter(title: "Type", default: TransactionType.expense) var type: TransactionType
+    @Parameter(title: "Source", default: MoneySource.bca) var source: MoneySource
     @Parameter(title: "Category") var category: CategoryEntity
 
     static var parameterSummary: some ParameterSummary {
