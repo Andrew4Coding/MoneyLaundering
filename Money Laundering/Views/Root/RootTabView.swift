@@ -11,7 +11,6 @@ private struct SharedReceipt: Identifiable {
     let imageData: Data
 }
 
-/// Tab shell (Home, Transactions, Bills, Account). The center "search" slot adds a plain
 struct RootTabView: View {
     @Binding var pendingReceiptImageData: Data?
 
@@ -74,16 +73,15 @@ struct RootTabView: View {
         .sheet(isPresented: $isPresentingAddTransaction) {
             AddTransactionView()
         }
-        .sheet(isPresented: $isPresentingSharedTransaction) {
-            AddTransactionView(receiptImageData: sharedReceiptImageData)
+        .sheet(item: $sharedReceipt) { receipt in
+            AddTransactionView(receiptImageData: receipt.imageData)
         }
     }
 
     private func presentSharedTransactionIfNeeded(_ data: Data?) {
         guard let data else { return }
-        sharedReceiptImageData = data
         pendingReceiptImageData = nil
-        isPresentingSharedTransaction = true
+        sharedReceipt = SharedReceipt(imageData: data)
     }
 }
 
