@@ -26,12 +26,51 @@ settings:
       SWIFT_COMPILATION_MODE: wholemodule
       VALIDATE_PRODUCT: YES
 
+schemes:
+  Money Laundering:
+    build:
+      targets:
+        "Money Laundering": all
+        MoneyLaunderingShareExtension: all
+    run:
+      config: Debug
+    test:
+      config: Debug
+    profile:
+      config: Release
+    analyze:
+      config: Debug
+    archive:
+      config: Release
+
+  Money Laundering Share Extension:
+    build:
+      targets:
+        MoneyLaunderingShareExtension: all
+    run:
+      config: Debug
+    test:
+      config: Debug
+    profile:
+      config: Release
+    analyze:
+      config: Debug
+    archive:
+      config: Release
+
 targets:
   "Money Laundering":
     type: application
     platform: iOS
     sources:
       - path: "Money Laundering"
+    info:
+      path: "Money Laundering/Info.plist"
+      properties:
+        CFBundleURLTypes:
+          - CFBundleURLName: com.andrew4coding.moneylaundering.Money-Laundering
+            CFBundleURLSchemes:
+              - moneylaundering
     entitlements:
       path: "Money Laundering/Money Laundering.entitlements"
       properties:
@@ -41,6 +80,11 @@ targets:
           - iCloud.com.andrew4coding.moneylaundering.Money-Laundering
         com.apple.developer.icloud-services:
           - CloudKit
+        com.apple.security.application-groups:
+          - group.com.andrew4coding.moneylaundering.sharedData
+    dependencies:
+      - target: MoneyLaunderingShareExtension
+        embed: true
     settings:
       base:
         ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
@@ -65,4 +109,37 @@ targets:
         SWIFT_DEFAULT_ACTOR_ISOLATION: MainActor
         SWIFT_EMIT_LOC_STRINGS: YES
         SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY: YES
+        TARGETED_DEVICE_FAMILY: "1,2"
+
+  MoneyLaunderingShareExtension:
+    type: app-extension
+    platform: iOS
+    sources:
+      - path: "MoneyLaunderingShareExtension"
+    entitlements:
+      path: "MoneyLaunderingShareExtension/MoneyLaunderingShareExtension.entitlements"
+      properties:
+        com.apple.security.application-groups:
+          - group.com.andrew4coding.moneylaundering.sharedData
+    info:
+      path: "MoneyLaunderingShareExtension/Info.plist"
+      properties:
+        CFBundleDisplayName: Money Laundering
+        NSExtension:
+          NSExtensionPointIdentifier: com.apple.share-services
+          NSExtensionPrincipalClass: $(PRODUCT_MODULE_NAME).ShareViewController
+          NSExtensionAttributes:
+            NSExtensionActivationRule:
+              NSExtensionActivationSupportsImageWithMaxCount: 1
+    settings:
+      base:
+        CODE_SIGN_STYLE: Automatic
+        CURRENT_PROJECT_VERSION: 1
+        DEVELOPMENT_TEAM: "92QV2QPDKA"
+        GENERATE_INFOPLIST_FILE: NO
+        MARKETING_VERSION: "1.0"
+        PRODUCT_BUNDLE_IDENTIFIER: com.andrew4coding.moneylaundering.Money-Laundering.MoneyLaunderingShareExtension
+        PRODUCT_NAME: "$(TARGET_NAME)"
+        SWIFT_APPROACHABLE_CONCURRENCY: YES
+        SWIFT_DEFAULT_ACTOR_ISOLATION: MainActor
         TARGETED_DEVICE_FAMILY: "1,2"
