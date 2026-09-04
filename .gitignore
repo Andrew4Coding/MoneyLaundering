@@ -134,8 +134,6 @@ iOSInjectionProject/
 # End of https://www.toptal.com/developers/gitignore/api/xcode,macos,swift
 
 # Custom ignores
-*Info.plist
-*info.plist
-
 *.pbxproj
+*.pbxproj/
 xcschemes/
