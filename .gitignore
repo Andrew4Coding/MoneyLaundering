@@ -136,4 +136,5 @@ iOSInjectionProject/
 # Custom ignores
 *.pbxproj
 *.pbxproj/
+*.xcodeproj/
 xcschemes/
