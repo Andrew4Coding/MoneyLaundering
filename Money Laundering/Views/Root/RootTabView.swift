@@ -6,11 +6,18 @@
 import SwiftData
 import SwiftUI
 
+private struct SharedReceipt: Identifiable {
+    let id = UUID()
+    let imageData: Data
+}
+
 /// Tab shell (Home, Transactions, Bills, Account). The center "search" slot adds a plain
-/// transaction, except on the Bills tab where it becomes a scan button for the new-bill editor.
 struct RootTabView: View {
+    @Binding var pendingReceiptImageData: Data?
+
     @State private var isPresentingScanBill = false
     @State private var isPresentingAddTransaction = false
+    @State private var sharedReceipt: SharedReceipt?
     @State private var selection = 0
     @State private var previousSelection = 0
 
@@ -55,16 +62,32 @@ struct RootTabView: View {
             }
             selection = previousSelection
         }
+        .onChange(of: pendingReceiptImageData) { _, newValue in
+            presentSharedTransactionIfNeeded(newValue)
+        }
+        .task {
+            presentSharedTransactionIfNeeded(pendingReceiptImageData)
+        }
         .sheet(isPresented: $isPresentingScanBill) {
             BillEditorView()
         }
         .sheet(isPresented: $isPresentingAddTransaction) {
             AddTransactionView()
         }
+        .sheet(isPresented: $isPresentingSharedTransaction) {
+            AddTransactionView(receiptImageData: sharedReceiptImageData)
+        }
+    }
+
+    private func presentSharedTransactionIfNeeded(_ data: Data?) {
+        guard let data else { return }
+        sharedReceiptImageData = data
+        pendingReceiptImageData = nil
+        isPresentingSharedTransaction = true
     }
 }
 
 #Preview {
-    RootTabView()
+    RootTabView(pendingReceiptImageData: .constant(nil))
         .modelContainer(for: [Transaction.self, TransactionCategory.self, Bill.self, BillItem.self], inMemory: true)
 }

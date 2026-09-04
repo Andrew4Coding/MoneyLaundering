@@ -25,6 +25,12 @@ struct AddTransactionView: View {
         }
     }
 
+    init(receiptImageData: Data?) {
+        let viewModel = AddTransactionViewModel()
+        viewModel.receiptImageData = receiptImageData
+        _viewModel = State(initialValue: viewModel)
+    }
+
     var body: some View {
         NavigationStack {
             Form {
