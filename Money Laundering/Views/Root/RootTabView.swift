@@ -32,10 +32,6 @@ struct RootTabView: View {
                 TransactionsListView()
             }
 
-            Tab("Bills", systemImage: "doc.text.image", value: 2) {
-                BillsListView()
-            }
-
             Tab("Account", systemImage: "person.crop.circle", value: 3) {
                 AccountView()
             }
