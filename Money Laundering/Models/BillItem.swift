@@ -5,9 +5,9 @@
 //  Created by Andrew Devito Aryo on 03/09/26.
 //
 
+import AppIntents
 import Foundation
 import SwiftData
-import AppIntents
 
 @Model
 final class BillItem {

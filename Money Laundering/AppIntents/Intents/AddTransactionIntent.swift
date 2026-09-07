@@ -5,8 +5,8 @@
 //  Created by Andrew Devito Aryo on 03/09/26.
 //
 
-import Foundation
 import AppIntents
+import Foundation
 import SwiftData
 
 struct AddTransactionIntent: AppIntent {

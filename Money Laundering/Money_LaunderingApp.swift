@@ -41,7 +41,9 @@ struct Money_LaunderingApp: App {
     private func consumePendingReceipt() {
         Task {
             for _ in 0 ..< 10 {
-                if pendingReceiptImageData != nil { return }
+                if pendingReceiptImageData != nil {
+                    return
+                }
                 if let data = SharedReceiptInbox.consume() {
                     pendingReceiptImageData = data
                     return

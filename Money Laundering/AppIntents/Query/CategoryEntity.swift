@@ -13,9 +13,13 @@ struct CategoryEntity: AppEntity {
     var id: String
     var name: String
 
-    static var typeDisplayRepresentation: TypeDisplayRepresentation { "Category" }
+    static var typeDisplayRepresentation: TypeDisplayRepresentation {
+        "Category"
+    }
 
-    var displayRepresentation: DisplayRepresentation { DisplayRepresentation(title: "\(name)") }
+    var displayRepresentation: DisplayRepresentation {
+        DisplayRepresentation(title: "\(name)")
+    }
 
     static var defaultQuery = CategoryEntityQuery()
 }

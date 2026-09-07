@@ -6,8 +6,8 @@
 //
 
 import AppIntents
-import SwiftData
 import Foundation
+import SwiftData
 
 struct TransactionEntity: AppEntity {
     var id: String
@@ -16,7 +16,9 @@ struct TransactionEntity: AppEntity {
     var date: Date
     var typeName: String
 
-    static var typeDisplayRepresentation: TypeDisplayRepresentation { "Transaction" }
+    static var typeDisplayRepresentation: TypeDisplayRepresentation {
+        "Transaction"
+    }
 
     var displayRepresentation: DisplayRepresentation {
         DisplayRepresentation(
@@ -28,11 +30,11 @@ struct TransactionEntity: AppEntity {
     static var defaultQuery = TransactionEntityQuery()
 
     init(_ tx: Transaction) {
-        self.id = tx.persistentModelID.storeIdentifier ?? UUID().uuidString
-        self.title = tx.title
-        self.amount = tx.amount
-        self.date = tx.date
-        self.typeName = tx.type.rawValue
+        id = tx.persistentModelID.storeIdentifier ?? UUID().uuidString
+        title = tx.title
+        amount = tx.amount
+        date = tx.date
+        typeName = tx.type.rawValue
     }
 }
 

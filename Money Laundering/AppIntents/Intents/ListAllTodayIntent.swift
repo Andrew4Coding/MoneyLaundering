@@ -5,8 +5,8 @@
 //  Created by Andrew Devito Aryo on 03/09/26.
 //
 
-import Foundation
 import AppIntents
+import Foundation
 import SwiftData
 
 struct TodayTransactionsIntent: AppIntent {
@@ -27,16 +27,16 @@ struct TodayTransactionsIntent: AppIntent {
         )
         let txs = try context.fetch(descriptor)
         let entities = txs.map(TransactionEntity.init)
-        
+
         let list = entities
-                .map { "\($0.title) — \(CurrencyFormatter.rupiah($0.amount))" }
-                .joined(separator: "\n")
+            .map { "\($0.title) — \(CurrencyFormatter.rupiah($0.amount))" }
+            .joined(separator: "\n")
 
         let total = txs.reduce(Decimal(0)) { $0 + ($1.type == .expense ? -$1.amount : $1.amount) }
 
         let dialog: IntentDialog = entities.isEmpty
             ? "No transactions today."
-        : "\(entities.count) transactions today, \(CurrencyFormatter.rupiah(total)). Transaction List: \(list)"
+            : "\(entities.count) transactions today, \(CurrencyFormatter.rupiah(total)). Transaction List: \(list)"
 
         return .result(value: entities, dialog: dialog)
     }

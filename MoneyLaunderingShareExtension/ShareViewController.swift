@@ -53,7 +53,8 @@ final class ShareViewController: UIViewController {
                 }
                 if let url,
                    let data = try? Data(contentsOf: url),
-                   let image = UIImage(data: data) {
+                   let image = UIImage(data: data)
+                {
                     completion(image)
                 } else {
                     loadImageObject(from: provider, completion: completion)

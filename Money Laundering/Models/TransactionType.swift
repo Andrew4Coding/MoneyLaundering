@@ -29,4 +29,3 @@ enum TransactionType: String, Codable, CaseIterable, Identifiable, AppEnum {
         [.expense: "Expense", .income: "Income"]
     }
 }
-
