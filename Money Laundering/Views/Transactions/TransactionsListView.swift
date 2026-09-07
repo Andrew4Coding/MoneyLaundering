@@ -64,6 +64,13 @@ struct TransactionsListView: View {
             .navigationTitle("Transactions")
             .searchable(text: $viewModel.searchText, prompt: "Search title, description, or category")
             .toolbar {
+                ToolbarItem(placement: .topBarLeading) {
+                    Button {
+                        isPresentingAdd = true
+                    } label: {
+                        Label("Add Transaction", systemImage: "plus")
+                    }
+                }
                 ToolbarItem(placement: .topBarTrailing) {
                     Menu {
                         Button("PDF") {

@@ -9,6 +9,7 @@ import SwiftUI
 struct HomeView: View {
     @Query(sort: \Transaction.date, order: .reverse) private var allTransactions: [Transaction]
     @State private var viewModel = HomeViewModel()
+    @State private var isPresentingAdd = false
 
     var body: some View {
         NavigationStack {
@@ -36,6 +37,18 @@ struct HomeView: View {
                 .padding()
             }
             .navigationTitle("Home")
+            .toolbar {
+                ToolbarItem(placement: .topBarLeading) {
+                    Button {
+                        isPresentingAdd = true
+                    } label: {
+                        Label("Add Transaction", systemImage: "plus")
+                    }
+                }
+            }
+            .sheet(isPresented: $isPresentingAdd) {
+                AddTransactionView()
+            }
         }
     }
 }
