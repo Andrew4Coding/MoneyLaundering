@@ -37,15 +37,6 @@ struct HomeView: View {
                 .padding()
             }
             .navigationTitle("Home")
-            .toolbar {
-                ToolbarItem(placement: .topBarLeading) {
-                    Button {
-                        isPresentingAdd = true
-                    } label: {
-                        Label("Add Transaction", systemImage: "plus")
-                    }
-                }
-            }
             .sheet(isPresented: $isPresentingAdd) {
                 AddTransactionView()
             }
