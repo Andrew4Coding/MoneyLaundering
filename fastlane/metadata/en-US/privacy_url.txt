@@ -1,0 +1,1 @@
+TODO: publicly reachable privacy policy URL (REQUIRED — Sign in with Apple mandates it). Must describe: Sign in with Apple (name), data stored in user's private iCloud, on-device processing, no third-party tracking.

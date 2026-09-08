@@ -1,0 +1,15 @@
+app_identifier("com.andrew4coding.moneylaundering.Money-Laundering")
+apple_id(ENV["FASTLANE_APPLE_ID"] || "andrewdevitoaryo@gmail.com")
+
+itc_team_id(ENV["FASTLANE_ITC_TEAM_ID"]) if ENV["FASTLANE_ITC_TEAM_ID"]
+team_id("92QV2QPDKA")
+
+# Extension target — kept in sync by the `register` lane / match.
+for_platform :ios do
+  for_lane :register do
+    app_identifier %w[
+      com.andrew4coding.moneylaundering.Money-Laundering
+      com.andrew4coding.moneylaundering.Money-Laundering.MoneyLaunderingShareExtension
+    ]
+  end
+end

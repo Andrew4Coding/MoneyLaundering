@@ -1,0 +1,11 @@
+TODO: full App Store description (max 4000 chars).
+
+Draft outline:
+- Track every transaction in, out, and where it went.
+- Private by design: your data stays in your own iCloud (private CloudKit), never on our servers.
+- Snap a photo of a bill and it is parsed on-device.
+- Smart category suggestions powered by on-device Apple Intelligence (where supported).
+- Add transactions hands-free with Siri.
+- Works fully offline; optional Sign in with Apple only enables cross-device sync.
+
+Do not claim features that are not in the build. No financial-advice language.
