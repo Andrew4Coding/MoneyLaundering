@@ -50,6 +50,20 @@ enum CategoryIconIntelligence {
         }
     }
 
+    /// Curated SF Symbols offered in the manual icon picker.
+    static let iconOptions: [String] = {
+        var seen = Set<String>()
+        let extras = [
+            "creditcard.fill", "cart.fill", "fuelpump.fill", "tram.fill", "bicycle",
+            "wineglass.fill", "birthday.cake.fill", "graduationcap.fill", "stethoscope",
+            "hammer.fill", "wrench.and.screwdriver.fill", "wifi", "bolt.fill", "drop.fill",
+            "gift.fill", "star.fill", "leaf.fill", "pawprint.fill", "figure.2.and.child.holdinghands",
+            "dollarsign.circle.fill", "chart.pie.fill", "building.columns.fill", "shippingbox.fill",
+            "ticket.fill", "cup.and.saucer.fill", "bag.fill", "questionmark.circle.fill",
+        ]
+        return (Icon.allCases.map(\.symbolName) + extras).filter { seen.insert($0).inserted }
+    }()
+
     /// Whether the on-device model is ready to use right now.
     static var isAvailable: Bool {
         SystemLanguageModel.default.availability == .available
@@ -59,22 +73,20 @@ enum CategoryIconIntelligence {
     /// resolver's result when Apple Intelligence can't be used.
     static func suggestSymbol(
         name: String,
-        description: String,
         scope: CategoryScope
     ) async -> String {
-        let fallback = CategorySymbolResolver.symbol(forName: name, description: description, scope: scope)
+        let fallback = CategorySymbolResolver.symbol(forName: name, scope: scope)
 
         guard SystemLanguageModel.default.availability == .available else { return fallback }
 
         let session = LanguageModelSession(instructions: """
         You choose the single icon that best represents a personal-finance category, \
-        given its name and short description. Consider what the user most likely spends \
+        given its name. Consider what the user most likely spends \
         money on or receives money for. Answer with one icon only.
         """)
 
         let prompt = """
         Category name: \(name)
-        Description: \(description.isEmpty ? "(none)" : description)
         Applies to: \(scope.displayName)
         """
 

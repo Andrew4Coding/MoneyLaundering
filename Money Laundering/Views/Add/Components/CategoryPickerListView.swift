@@ -13,8 +13,10 @@ struct CategoryPickerListView: View {
     let onEdit: (TransactionCategory) -> Void
     let onDelete: (TransactionCategory) -> Void
     let onTogglePin: (TransactionCategory) -> Void
+    let onReorder: ([TransactionCategory]) -> Void
 
     @Environment(\.dismiss) private var dismiss
+    @Environment(\.editMode) private var editMode
 
     private var pinnedCategories: [TransactionCategory] {
         categories.filter(\.isPinned)
@@ -24,12 +26,21 @@ struct CategoryPickerListView: View {
         categories.filter { !$0.isPinned }
     }
 
+    private var isReordering: Bool {
+        editMode?.wrappedValue.isEditing == true
+    }
+
     var body: some View {
         List {
             if !pinnedCategories.isEmpty {
                 Section("Pinned") {
                     ForEach(pinnedCategories, id: \.persistentModelID) { category in
                         row(for: category)
+                    }
+                    .onMove { source, destination in
+                        var reordered = pinnedCategories
+                        reordered.move(fromOffsets: source, toOffset: destination)
+                        onReorder(reordered + unpinnedCategories)
                     }
                 }
             }
@@ -38,11 +49,19 @@ struct CategoryPickerListView: View {
                 ForEach(unpinnedCategories, id: \.persistentModelID) { category in
                     row(for: category)
                 }
+                .onMove { source, destination in
+                    var reordered = unpinnedCategories
+                    reordered.move(fromOffsets: source, toOffset: destination)
+                    onReorder(pinnedCategories + reordered)
+                }
             }
         }
         .navigationTitle("Category")
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
+            ToolbarItem(placement: .topBarLeading) {
+                EditButton()
+            }
             ToolbarItem(placement: .topBarTrailing) {
                 Button(action: onCreateNew) {
                     Label("New Category", systemImage: "plus")
@@ -53,6 +72,7 @@ struct CategoryPickerListView: View {
 
     private func row(for category: TransactionCategory) -> some View {
         Button {
+            guard !isReordering else { return }
             selection = category
             dismiss()
         } label: {
@@ -106,7 +126,8 @@ struct CategoryPickerListView: View {
             onCreateNew: {},
             onEdit: { _ in },
             onDelete: { _ in },
-            onTogglePin: { _ in }
+            onTogglePin: { _ in },
+            onReorder: { _ in }
         )
     }
 }

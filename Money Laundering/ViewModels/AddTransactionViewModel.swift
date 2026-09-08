@@ -20,8 +20,11 @@ final class AddTransactionViewModel {
 
     var isPresentingCustomCategoryEditor = false
     var newCategoryName: String = ""
-    var newCategoryDescription: String = ""
     var newCategoryScope: CategoryScope = .expense
+
+    /// Symbol the user picked by hand in the editor. When set, it wins over every automatic
+    /// suggestion; `nil` means "let Apple Intelligence / the resolver choose".
+    var manuallyPickedSymbol: String?
 
     /// Non-nil when the category editor sheet is editing an existing category rather than
     /// creating a new one.
@@ -39,11 +42,14 @@ final class AddTransactionViewModel {
     /// Symbol the new/edited category will get — Apple Intelligence's pick when we have one,
     /// otherwise the keyword-based resolver. Never chosen by hand.
     var resolvedCategorySymbol: String {
-        aiSuggestedSymbol ?? CategorySymbolResolver.symbol(
-            forName: newCategoryName,
-            description: newCategoryDescription,
-            scope: newCategoryScope
-        )
+        manuallyPickedSymbol
+            ?? aiSuggestedSymbol
+            ?? CategorySymbolResolver.symbol(forName: newCategoryName, scope: newCategoryScope)
+    }
+
+    /// Whether the icon is currently being chosen automatically rather than by hand.
+    var isUsingAutomaticIcon: Bool {
+        manuallyPickedSymbol == nil
     }
 
     var isAppleIntelligenceIconAvailable: Bool {
@@ -57,10 +63,9 @@ final class AddTransactionViewModel {
         iconSuggestionTask?.cancel()
 
         let name = newCategoryName.trimmingCharacters(in: .whitespaces)
-        let description = newCategoryDescription.trimmingCharacters(in: .whitespaces)
         let scope = newCategoryScope
 
-        guard name.count >= 2, CategoryIconIntelligence.isAvailable else {
+        guard manuallyPickedSymbol == nil, name.count >= 2, CategoryIconIntelligence.isAvailable else {
             aiSuggestedSymbol = nil
             isSuggestingCategoryIcon = false
             return
@@ -73,7 +78,6 @@ final class AddTransactionViewModel {
             self?.isSuggestingCategoryIcon = true
             let symbol = await CategoryIconIntelligence.suggestSymbol(
                 name: name,
-                description: description,
                 scope: scope
             )
             guard !Task.isCancelled else { return }
@@ -109,7 +113,7 @@ final class AddTransactionViewModel {
     func availableCategories(from allCategories: [TransactionCategory]) -> [TransactionCategory] {
         allCategories
             .filter { $0.appliesTo.allows(type) }
-            .sorted { $0.name < $1.name }
+            .sorted { ($0.sortIndex, $0.name) < ($1.sortIndex, $1.name) }
     }
 
     /// Clears a category and/or source that no longer applies after the type is switched.
@@ -173,8 +177,8 @@ final class AddTransactionViewModel {
     func beginCreatingCategory() {
         editingCategory = nil
         newCategoryName = ""
-        newCategoryDescription = ""
         newCategoryScope = type == .income ? .income : .expense
+        manuallyPickedSymbol = nil
         iconSuggestionTask?.cancel()
         aiSuggestedSymbol = nil
         isSuggestingCategoryIcon = false
@@ -185,8 +189,8 @@ final class AddTransactionViewModel {
     func beginEditingCategory(_ category: TransactionCategory) {
         editingCategory = category
         newCategoryName = category.name
-        newCategoryDescription = category.categoryDescription
         newCategoryScope = category.appliesTo
+        manuallyPickedSymbol = category.iconValue
         iconSuggestionTask?.cancel()
         aiSuggestedSymbol = nil
         isSuggestingCategoryIcon = false
@@ -198,7 +202,6 @@ final class AddTransactionViewModel {
         guard isCustomCategoryValid else { return nil }
 
         let trimmedName = newCategoryName.trimmingCharacters(in: .whitespaces)
-        let trimmedDescription = newCategoryDescription.trimmingCharacters(in: .whitespaces)
         let symbolName = resolvedCategorySymbol
 
         let category: TransactionCategory
@@ -206,17 +209,18 @@ final class AddTransactionViewModel {
             editingCategory.name = trimmedName
             editingCategory.iconType = .system
             editingCategory.iconValue = symbolName
-            editingCategory.categoryDescription = trimmedDescription
             editingCategory.appliesTo = newCategoryScope
             category = editingCategory
         } else {
+            let existing = (try? context.fetch(FetchDescriptor<TransactionCategory>())) ?? []
+            let nextIndex = (existing.map(\.sortIndex).max() ?? -1) + 1
             let created = TransactionCategory(
                 name: trimmedName,
                 iconType: .system,
                 iconValue: symbolName,
-                categoryDescription: trimmedDescription,
                 appliesTo: newCategoryScope,
-                isDefault: false
+                isDefault: false,
+                sortIndex: nextIndex
             )
             context.insert(created)
             category = created
@@ -242,6 +246,20 @@ final class AddTransactionViewModel {
 
     func togglePin(_ category: TransactionCategory, context: ModelContext) {
         category.isPinned.toggle()
+        try? context.save()
+    }
+
+    /// Persists a new top-to-bottom order for the given (visible) categories by rewriting their
+    /// `sortIndex`. Categories not in the list keep their relative order after these.
+    func reorderCategories(_ ordered: [TransactionCategory], context: ModelContext) {
+        let visibleIDs = Set(ordered.map(\.persistentModelID))
+        let others = ((try? context.fetch(FetchDescriptor<TransactionCategory>())) ?? [])
+            .filter { !visibleIDs.contains($0.persistentModelID) }
+            .sorted { $0.sortIndex < $1.sortIndex }
+
+        for (index, category) in (ordered + others).enumerated() where category.sortIndex != index {
+            category.sortIndex = index
+        }
         try? context.save()
     }
 }

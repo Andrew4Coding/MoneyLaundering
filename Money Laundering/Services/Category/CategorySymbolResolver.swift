@@ -5,13 +5,13 @@
 
 import Foundation
 
-/// Picks an SF Symbol for a category from its name and description, so the user never has to
-/// choose an icon when creating one.
+/// Picks an SF Symbol for a category from its name, used as the fallback when the user has not
+/// chosen an icon by hand and Apple Intelligence is unavailable.
 enum CategorySymbolResolver {
     static let fallbackSymbol = "tag.fill"
 
-    static func symbol(forName name: String, description: String = "", scope: CategoryScope = .both) -> String {
-        let haystack = "\(name) \(description)".lowercased()
+    static func symbol(forName name: String, scope: CategoryScope = .both) -> String {
+        let haystack = name.lowercased()
 
         for rule in rules where rule.keywords.contains(where: haystack.contains) {
             return rule.symbolName

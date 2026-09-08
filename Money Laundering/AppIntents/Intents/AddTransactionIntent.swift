@@ -14,8 +14,8 @@ struct AddTransactionIntent: AppIntent {
     static var description = IntentDescription("Records a new income or expense.")
     static var openAppWhenRun = false
 
-    @Parameter(title: "Amount", requestValueDialog: "Enter amount") var amount: Double
-    @Parameter(title: "Title", requestValueDialog: "Enter title") var name: String
+    @Parameter(title: "Amount") var amount: Double
+    @Parameter(title: "Title") var name: String
     @Parameter(title: "Type", default: TransactionType.expense) var type: TransactionType
     @Parameter(title: "Source", default: MoneySource.bca) var source: MoneySource
     @Parameter(title: "Category", requestValueDialog: "Which category? Leave blank to auto-detect")

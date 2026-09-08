@@ -12,19 +12,25 @@ struct CustomCategoryEditorView: View {
     @Environment(\.dismiss) private var dismiss
     @Environment(\.modelContext) private var modelContext
 
+    private let iconColumns = [GridItem(.adaptive(minimum: 44), spacing: 12)]
+
     var body: some View {
         NavigationStack {
             Form {
                 Section("Details") {
                     TextField("Name", text: $viewModel.newCategoryName)
-                    TextField("Description", text: $viewModel.newCategoryDescription)
                 }
 
                 Section {
-                    iconRow
+                    iconPreviewRow
+                    iconGrid
+                } header: {
+                    Text("Icon")
                 } footer: {
-                    if viewModel.isAppleIntelligenceIconAvailable {
-                        Text("Chosen automatically by Apple Intelligence from the name and description.")
+                    if viewModel.isUsingAutomaticIcon, viewModel.isAppleIntelligenceIconAvailable {
+                        Text("Chosen automatically by Apple Intelligence from the name. Tap an icon to pick one yourself.")
+                    } else if viewModel.isUsingAutomaticIcon {
+                        Text("Chosen automatically from the name. Tap an icon to pick one yourself.")
                     }
                 }
 
@@ -34,7 +40,6 @@ struct CustomCategoryEditorView: View {
                 }
             }
             .onChange(of: viewModel.newCategoryName) { viewModel.requestIconSuggestion() }
-            .onChange(of: viewModel.newCategoryDescription) { viewModel.requestIconSuggestion() }
             .onChange(of: viewModel.newCategoryScope) { viewModel.requestIconSuggestion() }
             .navigationTitle(viewModel.isEditingCategory ? "Edit Category" : "New Category")
             .navigationBarTitleDisplayMode(.inline)
@@ -53,7 +58,7 @@ struct CustomCategoryEditorView: View {
         }
     }
 
-    private var iconRow: some View {
+    private var iconPreviewRow: some View {
         HStack(spacing: 12) {
             Image(systemName: viewModel.resolvedCategorySymbol)
                 .font(.title3)
@@ -61,13 +66,42 @@ struct CustomCategoryEditorView: View {
                 .frame(width: 32, height: 32)
                 .background(AppTheme.categoryColor.opacity(0.18), in: RoundedRectangle(cornerRadius: 8))
 
-            Text("Icon")
+            Text(viewModel.isUsingAutomaticIcon ? "Automatic" : "Custom")
+                .foregroundStyle(.secondary)
             Spacer()
 
             if viewModel.isSuggestingCategoryIcon {
                 ProgressView()
+            } else if !viewModel.isUsingAutomaticIcon {
+                Button("Auto") {
+                    viewModel.manuallyPickedSymbol = nil
+                    viewModel.requestIconSuggestion()
+                }
+                .font(.footnote.weight(.semibold))
             }
         }
+    }
+
+    private var iconGrid: some View {
+        LazyVGrid(columns: iconColumns, spacing: 12) {
+            ForEach(CategoryIconIntelligence.iconOptions, id: \.self) { symbol in
+                let isSelected = !viewModel.isUsingAutomaticIcon && viewModel.resolvedCategorySymbol == symbol
+                Button {
+                    viewModel.manuallyPickedSymbol = symbol
+                } label: {
+                    Image(systemName: symbol)
+                        .font(.body)
+                        .foregroundStyle(isSelected ? Color.white : AppTheme.categoryColor)
+                        .frame(width: 44, height: 44)
+                        .background(
+                            (isSelected ? AppTheme.categoryColor : AppTheme.categoryColor.opacity(0.14)),
+                            in: RoundedRectangle(cornerRadius: 10)
+                        )
+                }
+                .buttonStyle(.plain)
+            }
+        }
+        .padding(.vertical, 4)
     }
 
     private var expenseEnabled: Bool {

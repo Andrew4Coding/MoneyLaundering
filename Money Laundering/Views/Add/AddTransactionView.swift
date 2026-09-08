@@ -10,7 +10,7 @@ import SwiftUI
 struct AddTransactionView: View {
     @Environment(\.dismiss) private var dismiss
     @Environment(\.modelContext) private var modelContext
-    @Query(sort: \TransactionCategory.name) private var allCategories: [TransactionCategory]
+    @Query(sort: \TransactionCategory.sortIndex) private var allCategories: [TransactionCategory]
 
     @State private var viewModel: AddTransactionViewModel
     @State private var receiptPhotoItem: PhotosPickerItem?
@@ -72,7 +72,8 @@ struct AddTransactionView: View {
                             onCreateNew: { viewModel.beginCreatingCategory() },
                             onEdit: { viewModel.beginEditingCategory($0) },
                             onDelete: { viewModel.deleteCategory($0, context: modelContext) },
-                            onTogglePin: { viewModel.togglePin($0, context: modelContext) }
+                            onTogglePin: { viewModel.togglePin($0, context: modelContext) },
+                            onReorder: { viewModel.reorderCategories($0, context: modelContext) }
                         )
                     } label: {
                         HStack(spacing: 12) {
