@@ -21,6 +21,17 @@ struct MoneyShortcuts: AppShortcutsProvider {
         )
 
         AppShortcut(
+            intent: SiriAddTransactionIntent(),
+            phrases: [
+                "Quick add expense in \(.applicationName)",
+                "Quick add a transaction in \(.applicationName)",
+                "Log a quick expense in \(.applicationName)",
+            ],
+            shortTitle: "Quick Add",
+            systemImageName: "bolt.fill"
+        )
+
+        AppShortcut(
             intent: TodayTransactionsIntent(),
             phrases: [
                 "Show today's transactions in \(.applicationName)",

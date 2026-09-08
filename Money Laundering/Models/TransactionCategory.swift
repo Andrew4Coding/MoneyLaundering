@@ -38,7 +38,6 @@ enum CategoryScope: String, Codable, CaseIterable, Identifiable {
 
 /// Named `TransactionCategory` (not `Category`) to avoid colliding with `ObjectiveC.Category`,
 /// a typealias to `OpaquePointer` auto-imported via Foundation — using `Category` here silently
-/// resolves to that opaque C type instead of this model.
 @Model
 final class TransactionCategory {
     var name: String = ""
@@ -81,5 +80,20 @@ final class TransactionCategory {
         self.isDefault = isDefault
         self.isPinned = isPinned
         self.createdAt = createdAt
+    }
+
+    /// Lightweight category identified by name only (icon/scope left at defaults).
+    convenience init(name: String) {
+        self.init(name: name, iconType: .system, iconValue: "questionmark.circle")
+    }
+}
+
+extension TransactionCategory {
+    @MainActor
+    static func matching(_ name: String, in context: ModelContext) -> TransactionCategory? {
+        let all = (try? context.fetch(FetchDescriptor<TransactionCategory>())) ?? []
+        return all.first { $0.name.localizedCaseInsensitiveCompare(name) == .orderedSame }
+            ?? all.first { $0.name.localizedCaseInsensitiveContains(name) || name.localizedCaseInsensitiveContains($0.name) }
+            ?? all.first { $0.name.caseInsensitiveCompare("Other") == .orderedSame }
     }
 }
