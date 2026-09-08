@@ -71,6 +71,9 @@ targets:
           - CFBundleURLName: com.andrew4coding.moneylaundering.Money-Laundering
             CFBundleURLSchemes:
               - moneylaundering
+        UIBackgroundModes:
+          - fetch
+          - remote-notification
     entitlements:
       path: "Money Laundering/Money Laundering.entitlements"
       properties:
