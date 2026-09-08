@@ -67,6 +67,7 @@ targets:
     info:
       path: "Money Laundering/Info.plist"
       properties:
+        ITSAppUsesNonExemptEncryption: false
         CFBundleURLTypes:
           - CFBundleURLName: com.andrew4coding.moneylaundering.Money-Laundering
             CFBundleURLSchemes:
