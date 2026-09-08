@@ -94,7 +94,7 @@ struct CustomCategoryEditorView: View {
                         .foregroundStyle(isSelected ? Color.white : AppTheme.categoryColor)
                         .frame(width: 44, height: 44)
                         .background(
-                            (isSelected ? AppTheme.categoryColor : AppTheme.categoryColor.opacity(0.14)),
+                            isSelected ? AppTheme.categoryColor : AppTheme.categoryColor.opacity(0.14),
                             in: RoundedRectangle(cornerRadius: 10)
                         )
                 }

@@ -94,7 +94,6 @@ struct AccountView: View {
         }
     }
 
-    @ViewBuilder
     private var dataManagementSection: some View {
         Section {
             Button("Reset All Data", role: .destructive) {
@@ -135,7 +134,11 @@ struct AccountView: View {
         }
         .alert(
             "Something went wrong",
-            isPresented: Binding(get: { dataError != nil }, set: { if !$0 { dataError = nil } }),
+            isPresented: Binding(get: { dataError != nil }, set: {
+                if !$0 {
+                    dataError = nil
+                }
+            }),
             presenting: dataError
         ) { _ in
             Button("OK", role: .cancel) {}
@@ -145,12 +148,16 @@ struct AccountView: View {
     }
 
     private var deleteButtonTitle: String {
-        if case .signedIn = authService.state { return "Delete Account" }
+        if case .signedIn = authService.state {
+            return "Delete Account"
+        }
         return "Delete All Data"
     }
 
     private var deleteDialogTitle: String {
-        if case .signedIn = authService.state { return "Delete your account?" }
+        if case .signedIn = authService.state {
+            return "Delete your account?"
+        }
         return "Delete all data?"
     }
 
@@ -162,7 +169,9 @@ struct AccountView: View {
     }
 
     private var syncScopeSuffix: String {
-        if case .localOnly = authService.state { return " on this device" }
+        if case .localOnly = authService.state {
+            return " on this device"
+        }
         return " on this device and any copies synced through iCloud"
     }
 

@@ -1,5 +1,5 @@
 //
-//  SiriAddTransactionIntent.swift
+//  AddTransactionIntent.swift
 //  Money Laundering
 //
 //  Created by Andrew Devito Aryo on 08/09/26.

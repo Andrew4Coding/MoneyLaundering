@@ -12,7 +12,7 @@ import FoundationModels
 struct ParsedTransaction {
     @Guide(description: "Transaction type, either 'expense' or 'income'")
     var type: String
-    
+
     @Guide(description: "Amount in whole rupiah. Expand shorthand: 20k→20000, 1.5jt/1.5 juta→1500000, 20 ribu→20000, 3jt/3juta/3mil->3000000")
     var amount: Double
 
@@ -29,7 +29,7 @@ enum TransactionParser {
         guard case .available = model.availability else {
             throw NeedsFallback()
         }
-        
+
         let session = LanguageModelSession(instructions: """
         You extract a single transaction from a short phrase for a personal
         finance app. Currency is Indonesian rupiah. Give the transaction a

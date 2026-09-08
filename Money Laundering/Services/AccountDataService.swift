@@ -20,7 +20,7 @@ enum AccountDataService {
         }
     }
 
-    private static func deleteAll<T: PersistentModel>(_ type: T.Type, in context: ModelContext) throws {
+    private static func deleteAll<T: PersistentModel>(_: T.Type, in context: ModelContext) throws {
         for object in try context.fetch(FetchDescriptor<T>()) {
             context.delete(object)
         }
