@@ -35,7 +35,7 @@ final class ShareViewController: UIViewController {
         loadImage(from: provider) { [weak self] image in
             guard let self else { return }
             if let image, let compressed = Self.compressedData(from: image) {
-                Self.writeToInbox(compressed)
+                Self.writeToInbox(compressed, log: self.log)
             } else {
                 self.log.error("Could not load the shared image")
             }
@@ -43,40 +43,80 @@ final class ShareViewController: UIViewController {
         }
     }
 
-    private nonisolated func loadImage(from provider: NSItemProvider, completion: @escaping (UIImage?) -> Void) {
-        let typeID = UTType.image.identifier
 
-        if provider.hasItemConformingToTypeIdentifier(typeID) {
-            provider.loadFileRepresentation(forTypeIdentifier: typeID) { [self] url, error in
-                if let error {
-                    log.error("loadFileRepresentation failed: \(error.localizedDescription, privacy: .public)")
-                }
-                if let url,
-                   let data = try? Data(contentsOf: url),
-                   let image = UIImage(data: data)
-                {
-                    completion(image)
-                } else {
-                    loadImageObject(from: provider, completion: completion)
-                }
+    private nonisolated func loadImage(from provider: NSItemProvider, completion: @escaping (UIImage?) -> Void) {
+        let imageTypes = provider.registeredTypeIdentifiers.filter {
+            UTType($0)?.conforms(to: .image) == true
+        }
+        loadData(from: provider, types: imageTypes.isEmpty ? [UTType.image.identifier] : imageTypes, completion: completion)
+    }
+
+    /// Tries `loadDataRepresentation` for each candidate UTType, then falls back to the object loader.
+    private nonisolated func loadData(
+        from provider: NSItemProvider,
+        types: [String],
+        completion: @escaping (UIImage?) -> Void
+    ) {
+        guard let typeID = types.first else {
+            loadObject(from: provider, completion: completion)
+            return
+        }
+        provider.loadDataRepresentation(forTypeIdentifier: typeID) { [self] data, error in
+            if let error {
+                log.error("loadDataRepresentation(\(typeID, privacy: .public)) failed: \(error.localizedDescription, privacy: .public)")
             }
-        } else {
-            loadImageObject(from: provider, completion: completion)
+            if let data, let image = UIImage(data: data) {
+                completion(image)
+            } else {
+                loadData(from: provider, types: Array(types.dropFirst()), completion: completion)
+            }
         }
     }
 
-    private nonisolated func loadImageObject(from provider: NSItemProvider, completion: @escaping (UIImage?) -> Void) {
+    /// Tries `loadObject(ofClass: UIImage.self)`, then the legacy `loadItem` API.
+    private nonisolated func loadObject(from provider: NSItemProvider, completion: @escaping (UIImage?) -> Void) {
         guard provider.canLoadObject(ofClass: UIImage.self) else {
-            completion(nil)
+            loadItem(from: provider, completion: completion)
             return
         }
         provider.loadObject(ofClass: UIImage.self) { [self] object, error in
             if let error {
                 log.error("loadObject(UIImage) failed: \(error.localizedDescription, privacy: .public)")
             }
-            completion(object as? UIImage)
+            if let image = object as? UIImage {
+                completion(image)
+            } else {
+                loadItem(from: provider, completion: completion)
+            }
         }
     }
+
+    /// Last-resort loader for providers that only implement the legacy `loadItem` API.
+    private nonisolated func loadItem(from provider: NSItemProvider, completion: @escaping (UIImage?) -> Void) {
+        let typeID = provider.registeredTypeIdentifiers.first {
+            UTType($0)?.conforms(to: .image) == true
+        } ?? UTType.image.identifier
+        provider.loadItem(forTypeIdentifier: typeID) { [self] item, error in
+            if let error {
+                log.error("loadItem(\(typeID, privacy: .public)) failed: \(error.localizedDescription, privacy: .public)")
+            }
+            switch item {
+            case let image as UIImage:
+                completion(image)
+            case let data as Data:
+                completion(UIImage(data: data))
+            case let url as URL where url.isFileURL:
+                let scoped = url.startAccessingSecurityScopedResource()
+                defer { if scoped { url.stopAccessingSecurityScopedResource() } }
+                completion((try? Data(contentsOf: url)).flatMap(UIImage.init(data:)))
+            default:
+                log.error("loadItem returned unsupported type: \(String(describing: item), privacy: .public)")
+                completion(nil)
+            }
+        }
+    }
+
+    // MARK: - Output
 
     /// Downscales and JPEG-encodes the shared photo so it stays small enough to sync via CloudKit.
     private static func compressedData(from image: UIImage, maxDimension: CGFloat = 2000) -> Data? {
@@ -94,36 +134,43 @@ final class ShareViewController: UIViewController {
     }
 
     /// Writes the pending receipt image into the shared App Group container for the app to consume.
-    private static func writeToInbox(_ data: Data) {
-        guard let url = FileManager.default
-            .containerURL(forSecurityApplicationGroupIdentifier: appGroupID)?
-            .appendingPathComponent(receiptFileName)
-        else { return }
-        try? data.write(to: url, options: .atomic)
+    private static func writeToInbox(_ data: Data, log: Logger) {
+        guard let container = FileManager.default
+            .containerURL(forSecurityApplicationGroupIdentifier: appGroupID)
+        else {
+            log.error("App Group container \(appGroupID, privacy: .public) is unavailable — check entitlements")
+            return
+        }
+        do {
+            try data.write(to: container.appendingPathComponent(receiptFileName), options: .atomic)
+        } catch {
+            log.error("Writing receipt to inbox failed: \(error.localizedDescription, privacy: .public)")
+        }
     }
+    
 
     private func openHostApp() {
-        let opened = openViaResponderChain(hostAppURL)
-        log.log("Opening host app: \(opened)")
+        openURL(hostAppURL)
         finish()
     }
 
+    
+    //    https://stackoverflow.com/a/78975759
+    @objc
     @discardableResult
-    private func openViaResponderChain(_ url: URL) -> Bool {
-        let selector = NSSelectorFromString("openURL:options:completionHandler:")
-        typealias OpenURLC = @convention(c) (NSObject, Selector, NSURL, NSDictionary, Any?) -> Void
-
+    private func openURL(_ url: URL) -> Bool {
         var responder: UIResponder? = self
-        while let current = responder {
-            if let application = current as? UIApplication, application.responds(to: selector) {
-                let implementation = application.method(for: selector)
-                let callable = unsafeBitCast(implementation, to: OpenURLC.self)
-                callable(application, selector, url as NSURL, NSDictionary(), nil)
-                return true
+        while responder != nil {
+            if let application = responder as? UIApplication {
+                if #available(iOS 18.0, *) {
+                    application.open(url, options: [:], completionHandler: nil)
+                    return true
+                } else {
+                    return application.perform(#selector(openURL(_:)), with: url) != nil
+                }
             }
-            responder = current.next
+            responder = responder?.next
         }
-        log.error("Responder chain had no UIApplication — cannot open host app")
         return false
     }
 
