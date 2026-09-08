@@ -19,7 +19,7 @@ struct Money_LaunderingApp: App {
         WindowGroup {
             Group {
                 switch authService.state {
-                case .signedIn:
+                case .signedIn, .localOnly:
                     RootTabView(pendingReceiptImageData: $pendingReceiptImageData)
                 case .signedOut:
                     SignInView()

@@ -7,55 +7,63 @@ import AuthenticationServices
 import Foundation
 import Observation
 
-/// Gates app access behind Sign in with Apple. Only the Apple user identifier and display
-/// name are persisted locally (UserDefaults) — actual data sync is handled separately by
-/// SwiftData's private CloudKit database, which is tied to the device's iCloud account.
 @Observable
-final class AuthenticationService: NSObject {
+final class AuthenticationService {
     enum State: Equatable {
         case signedOut
         case signedIn(userID: String, displayName: String?)
+        /// The user chose to use the app without an account. Data is still stored locally and,
+        /// when the device has iCloud, synced through the same private CloudKit database.
+        case localOnly
     }
 
     private static let userIDKey = "appleUserIdentifier"
     private static let displayNameKey = "appleDisplayName"
+    private static let localOnlyKey = "usesAppWithoutAccount"
 
     private(set) var state: State
 
-    override init() {
+    init() {
         if let userID = UserDefaults.standard.string(forKey: Self.userIDKey) {
             state = .signedIn(userID: userID, displayName: UserDefaults.standard.string(forKey: Self.displayNameKey))
+            verifyCredentialState(for: userID)
+        } else if UserDefaults.standard.bool(forKey: Self.localOnlyKey) {
+            state = .localOnly
         } else {
             state = .signedOut
         }
-        super.init()
-
-        if case let .signedIn(userID, _) = state {
-            refreshCredentialState(for: userID)
-        }
     }
 
-    /// Apple can revoke a credential (e.g. user removes the app's Apple ID access from
-    /// Settings) without the app being notified directly, so re-check on launch.
-    private func refreshCredentialState(for userID: String) {
+    /// Enters the app without signing in. Everything keeps working locally; only the
+    /// Apple ID name shown in Account is unavailable until the user signs in later.
+    func continueWithoutAccount() {
+        UserDefaults.standard.set(true, forKey: Self.localOnlyKey)
+        state = .localOnly
+    }
+
+    private func verifyCredentialState(for userID: String) {
         ASAuthorizationAppleIDProvider().getCredentialState(forUserID: userID) { [weak self] credentialState, _ in
-            guard credentialState == .revoked else { return }
-            DispatchQueue.main.async {
-                self?.signOut()
+            switch credentialState {
+            case .revoked, .notFound:
+                DispatchQueue.main.async { self?.signOut() }
+            default:
+                break
             }
         }
     }
 
+    /// Stores the user identifier and (first sign-in only) the name from a successful authorization.
     func handleAuthorization(_ authorization: ASAuthorization) {
         guard let credential = authorization.credential as? ASAuthorizationAppleIDCredential else { return }
 
         let userID = credential.user
-        // Apple only supplies fullName on the very first authorization for a given user;
-        // fall back to whatever was previously stored on subsequent sign-ins.
-        let formattedName = Self.formattedName(from: credential.fullName)
-        let displayName = formattedName ?? UserDefaults.standard.string(forKey: Self.displayNameKey)
+        // Apple supplies fullName only on the first authorization; reuse the stored name afterwards.
+        let newName = credential.fullName?.formatted()
+        let displayName = (newName?.isEmpty == false ? newName : nil)
+            ?? UserDefaults.standard.string(forKey: Self.displayNameKey)
 
         UserDefaults.standard.set(userID, forKey: Self.userIDKey)
+        UserDefaults.standard.removeObject(forKey: Self.localOnlyKey)
         if let displayName {
             UserDefaults.standard.set(displayName, forKey: Self.displayNameKey)
         }
@@ -63,23 +71,10 @@ final class AuthenticationService: NSObject {
         state = .signedIn(userID: userID, displayName: displayName)
     }
 
-    /// Builds a human-readable name from Apple's `PersonNameComponents`, returning `nil` when
-    /// no usable name parts were supplied (Apple sends empty components on repeat sign-ins).
-    private static func formattedName(from components: PersonNameComponents?) -> String? {
-        guard let components else { return nil }
-        let hasAnyPart = [components.givenName, components.familyName, components.nickname]
-            .contains { !($0 ?? "").isEmpty }
-        guard hasAnyPart else { return nil }
-
-        let formatter = PersonNameComponentsFormatter()
-        formatter.style = .medium
-        let formatted = formatter.string(from: components).trimmingCharacters(in: .whitespaces)
-        return formatted.isEmpty ? nil : formatted
-    }
-
     func signOut() {
         UserDefaults.standard.removeObject(forKey: Self.userIDKey)
         UserDefaults.standard.removeObject(forKey: Self.displayNameKey)
+        UserDefaults.standard.removeObject(forKey: Self.localOnlyKey)
         state = .signedOut
     }
 }

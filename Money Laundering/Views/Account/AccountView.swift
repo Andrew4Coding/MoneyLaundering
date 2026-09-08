@@ -3,21 +3,45 @@
 //  Money Laundering
 //
 
+import AuthenticationServices
 import SwiftUI
 
 struct AccountView: View {
     @Environment(AuthenticationService.self) private var authService
+    @Environment(\.colorScheme) private var colorScheme
 
     var body: some View {
         NavigationStack {
             List {
-                if case let .signedIn(userID, displayName) = authService.state {
+                switch authService.state {
+                case let .signedIn(userID, displayName):
                     Section("Signed in with Apple") {
                         if let displayName, !displayName.isEmpty {
                             LabeledContent("Name", value: displayName)
+                        } else {
+                            LabeledContent("Apple ID", value: maskedIdentifier(userID))
                         }
-                        LabeledContent("Apple ID", value: maskedIdentifier(userID))
                     }
+                case .localOnly:
+                    Section {
+                        SignInWithAppleButton(.signIn) { request in
+                            request.requestedScopes = [.fullName, .email]
+                        } onCompletion: { result in
+                            if case let .success(authorization) = result {
+                                authService.handleAuthorization(authorization)
+                            }
+                        }
+                        .signInWithAppleButtonStyle(colorScheme == .dark ? .white : .black)
+                        .frame(height: 48)
+                        .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
+                        .listRowInsets(EdgeInsets(top: 8, leading: 16, bottom: 8, trailing: 16))
+                    } header: {
+                        Text("Using without an account")
+                    } footer: {
+                        Text("Sign in with Apple to attach a name to this device. Your existing data stays exactly where it is.")
+                    }
+                case .signedOut:
+                    EmptyView()
                 }
 
                 Section {
@@ -28,13 +52,20 @@ struct AccountView: View {
                 }
 
                 Section {
-                    Button("Sign Out", role: .destructive) {
+                    Button(signOutTitle, role: .destructive) {
                         authService.signOut()
                     }
                 }
             }
             .navigationTitle("Account")
         }
+    }
+
+    private var signOutTitle: String {
+        if case .localOnly = authService.state {
+            return "Reset & Return to Sign In"
+        }
+        return "Sign Out"
     }
 
     /// Apple's opaque user identifier is long and sensitive; show only a recognizable prefix.
