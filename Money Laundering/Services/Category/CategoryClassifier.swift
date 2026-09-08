@@ -24,11 +24,11 @@ enum CategoryClassifier {
         guard case .available = SystemLanguageModel.default.availability else { return nil }
 
         let session = LanguageModelSession(instructions: """
-            You categorize a personal-finance \(type.rawValue) transaction for an Indonesian user.
-            Choose exactly one category, copying its name verbatim from this list:
-            \(candidates.joined(separator: ", ")).
-            If nothing fits well, choose "Other".
-            """)
+        You categorize a personal-finance \(type.rawValue) transaction for an Indonesian user.
+        Choose exactly one category, copying its name verbatim from this list:
+        \(candidates.joined(separator: ", ")).
+        If nothing fits well, choose "Other".
+        """)
 
         let prompt = note.isEmpty ? "Transaction: \"\(trimmed)\"" : "Transaction: \"\(trimmed)\" (\(note))"
 

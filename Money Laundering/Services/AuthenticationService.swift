@@ -12,8 +12,6 @@ final class AuthenticationService {
     enum State: Equatable {
         case signedOut
         case signedIn(userID: String, displayName: String?)
-        /// The user chose to use the app without an account. Data is still stored locally and,
-        /// when the device has iCloud, synced through the same private CloudKit database.
         case localOnly
     }
 
@@ -34,8 +32,6 @@ final class AuthenticationService {
         }
     }
 
-    /// Enters the app without signing in. Everything keeps working locally; only the
-    /// Apple ID name shown in Account is unavailable until the user signs in later.
     func continueWithoutAccount() {
         UserDefaults.standard.set(true, forKey: Self.localOnlyKey)
         state = .localOnly

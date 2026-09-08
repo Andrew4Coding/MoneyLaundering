@@ -43,7 +43,6 @@ final class ShareViewController: UIViewController {
         }
     }
 
-
     private nonisolated func loadImage(from provider: NSItemProvider, completion: @escaping (UIImage?) -> Void) {
         let imageTypes = provider.registeredTypeIdentifiers.filter {
             UTType($0)?.conforms(to: .image) == true
@@ -107,7 +106,11 @@ final class ShareViewController: UIViewController {
                 completion(UIImage(data: data))
             case let url as URL where url.isFileURL:
                 let scoped = url.startAccessingSecurityScopedResource()
-                defer { if scoped { url.stopAccessingSecurityScopedResource() } }
+                defer {
+                    if scoped {
+                        url.stopAccessingSecurityScopedResource()
+                    }
+                }
                 completion((try? Data(contentsOf: url)).flatMap(UIImage.init(data:)))
             default:
                 log.error("loadItem returned unsupported type: \(String(describing: item), privacy: .public)")
@@ -147,15 +150,13 @@ final class ShareViewController: UIViewController {
             log.error("Writing receipt to inbox failed: \(error.localizedDescription, privacy: .public)")
         }
     }
-    
 
     private func openHostApp() {
         openURL(hostAppURL)
         finish()
     }
 
-    
-    //    https://stackoverflow.com/a/78975759
+    ///    https://stackoverflow.com/a/78975759
     @objc
     @discardableResult
     private func openURL(_ url: URL) -> Bool {

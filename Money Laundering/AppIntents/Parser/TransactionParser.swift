@@ -8,7 +8,7 @@
 import Foundation
 import FoundationModels
 
-@Generable()
+@Generable
 struct ParsedTransaction {
     @Guide(description: "Amount in whole rupiah. Expand shorthand: 20k→20000, 1.5jt/1.5 juta→1500000, 20 ribu→20000")
     var amount: Double
@@ -23,7 +23,7 @@ struct ParsedTransaction {
 
     @Guide(description: "When the expense happened, ISO 8601 (e.g. 2026-09-08T14:00:00). Resolve relative words like \"yesterday\", \"2pm\" against the current date. Empty if not mentioned.")
     var occurredAt: String
-    
+
     var date: Date? {
         guard !occurredAt.isEmpty else { return nil }
         if let dt = try? Date(occurredAt, strategy: .iso8601.time(includingFractionalSeconds: false)) {
@@ -41,11 +41,11 @@ enum TransactionParser {
         }
         let today = Date.now.formatted(.iso8601.year().month().day())
         let session = LanguageModelSession(instructions: """
-            You extract a single expense from a short phrase for a personal
-            finance app. Currency is Indonesian rupiah. If no category is
-            clearly implied, use "other". Today is \(today); resolve any
-            relative date/time against it.
-            """)
+        You extract a single expense from a short phrase for a personal
+        finance app. Currency is Indonesian rupiah. If no category is
+        clearly implied, use "other". Today is \(today); resolve any
+        relative date/time against it.
+        """)
         return try await session.respond(
             to: "Extract the transaction from: \"\(text)\"",
             generating: ParsedTransaction.self

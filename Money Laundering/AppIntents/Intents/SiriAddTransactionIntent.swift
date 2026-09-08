@@ -5,8 +5,8 @@
 //  Created by Andrew Devito Aryo on 08/09/26.
 //
 
-import Foundation
 import AppIntents
+import Foundation
 import SwiftData
 
 struct SiriAddTransactionIntent: AppIntent {
@@ -31,7 +31,7 @@ struct SiriAddTransactionIntent: AppIntent {
         let category = TransactionCategory.matching(canonicalCategoryName(parsed.category), in: context)
         let categoryLabel = category?.name ?? "Uncategorized"
         let title = parsed.note.isEmpty ? categoryLabel : parsed.note
-        
+
         try await requestConfirmation(
             dialog: "Add \(CurrencyFormatter.rupiah(money)) for \(categoryLabel)?"
         )
@@ -73,7 +73,7 @@ struct SiriAddTransactionIntent: AppIntent {
         if let match = lower.firstMatch(of: /([0-9][0-9.,]*)\s*(k|rb|ribu|jt|juta|m)?/) {
             let digits = Double(match.1.replacing(",", with: "").replacing(".", with: "")) ?? 0
             switch match.2?.lowercased() {
-            case "k", "rb", "ribu": amount = digits * 1_000
+            case "k", "rb", "ribu": amount = digits * 1000
             case "jt", "juta", "m": amount = digits * 1_000_000
             default: amount = digits
             }

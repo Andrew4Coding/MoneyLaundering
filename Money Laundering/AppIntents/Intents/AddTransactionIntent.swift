@@ -54,7 +54,7 @@ struct AddTransactionIntent: AppIntent {
     @MainActor
     private func resolveCategory(
         from all: [TransactionCategory],
-        context: ModelContext
+        context _: ModelContext
     ) async -> TransactionCategory? {
         if let category {
             return all.first { $0.name.localizedCaseInsensitiveCompare(category.name) == .orderedSame }

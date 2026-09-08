@@ -8,7 +8,6 @@ import SwiftUI
 
 struct SignInView: View {
     @Environment(AuthenticationService.self) private var authService
-    @Environment(\.colorScheme) private var colorScheme
 
     @State private var animateIn = false
     @State private var floatPhase = false
@@ -38,7 +37,7 @@ struct SignInView: View {
             }
         }
     }
-    
+
     private var header: some View {
         VStack(spacing: 20) {
             Image("AppLogo")
@@ -63,21 +62,7 @@ struct SignInView: View {
 
     private var signInButton: some View {
         VStack(spacing: 12) {
-            SignInWithAppleButton(.signIn) { request in
-                request.requestedScopes = [.fullName, .email]
-            } onCompletion: { result in
-                switch result {
-                case let .success(authorization):
-                    authService.handleAuthorization(authorization)
-                case let .failure(error):
-                    print("Sign in with Apple failed: \(error.localizedDescription)")
-                }
-            }
-            .signInWithAppleButtonStyle(colorScheme == .dark ? .white : .black)
-            .frame(height: 52)
-            .clipShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
-            .shadow(color: AppTheme.accent.opacity(0.25), radius: 16, y: 8)
-
+            SignInButton()
             Button("Continue without an account") {
                 authService.continueWithoutAccount()
             }
