@@ -14,15 +14,10 @@ struct MoneyShortcuts: AppShortcutsProvider {
             intent: AddTransactionIntent(),
             phrases: [
                 "Add a transaction in \(.applicationName)",
+                "Add a transaction for \(.applicationName)",
+                "Add new transaction for \(.applicationName)",
+                "Add a new transaction for \(.applicationName)",
                 "Log an expense in \(.applicationName)",
-            ],
-            shortTitle: "Add Transaction",
-            systemImageName: "plus.circle"
-        )
-
-        AppShortcut(
-            intent: SiriAddTransactionIntent(),
-            phrases: [
                 "Quick add expense in \(.applicationName)",
                 "Quick add a transaction in \(.applicationName)",
                 "Log a quick expense in \(.applicationName)",
