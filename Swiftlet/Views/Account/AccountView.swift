@@ -6,6 +6,7 @@
 import AuthenticationServices
 import SwiftData
 import SwiftUI
+import UniformTypeIdentifiers
 
 struct AccountView: View {
     @Environment(AuthenticationService.self) private var authService
@@ -15,6 +16,9 @@ struct AccountView: View {
     @State private var isConfirmingReset = false
     @State private var isConfirmingDelete = false
     @State private var dataError: String?
+
+    @State private var isImportingData = false
+    @State private var importSummary: String?
 
     var body: some View {
         NavigationStack {
@@ -94,7 +98,18 @@ struct AccountView: View {
         }
     }
 
+    @ViewBuilder
     private var dataManagementSection: some View {
+        Section {
+            Button("Import Data from JSON") {
+                isImportingData = true
+            }
+        } header: {
+            Text("Import")
+        } footer: {
+            Text("Add transactions from a JSON file exported on the Transactions tab. Existing transactions are kept, and exact duplicates are skipped.")
+        }
+
         Section {
             Button("Reset All Data", role: .destructive) {
                 isConfirmingReset = true
@@ -144,6 +159,49 @@ struct AccountView: View {
             Button("OK", role: .cancel) {}
         } message: { message in
             Text(message)
+        }
+        .fileImporter(
+            isPresented: $isImportingData,
+            allowedContentTypes: [.json],
+            allowsMultipleSelection: false
+        ) { result in
+            handleImportResult(result)
+        }
+        .alert(
+            "Import Complete",
+            isPresented: Binding(get: { importSummary != nil }, set: {
+                if !$0 {
+                    importSummary = nil
+                }
+            }),
+            presenting: importSummary
+        ) { _ in
+            Button("OK", role: .cancel) {}
+        } message: { summary in
+            Text(summary)
+        }
+    }
+
+    private func handleImportResult(_ result: Result<[URL], Error>) {
+        do {
+            guard let url = try result.get().first else { return }
+            let didAccess = url.startAccessingSecurityScopedResource()
+            defer {
+                if didAccess {
+                    url.stopAccessingSecurityScopedResource()
+                }
+            }
+
+            let data = try Data(contentsOf: url)
+            let summary = try TransactionIOService.importJSON(data, into: modelContext)
+
+            if summary.skipped > 0 {
+                importSummary = "Imported \(summary.imported) transaction\(summary.imported == 1 ? "" : "s"). Skipped \(summary.skipped) duplicate or invalid entr\(summary.skipped == 1 ? "y" : "ies")."
+            } else {
+                importSummary = "Imported \(summary.imported) transaction\(summary.imported == 1 ? "" : "s")."
+            }
+        } catch {
+            dataError = error.localizedDescription
         }
     }
 

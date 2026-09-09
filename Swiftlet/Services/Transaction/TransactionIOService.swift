@@ -49,6 +49,91 @@ enum TransactionIOService {
         }
     }
 
+    // MARK: - Import
+
+    struct ImportResult {
+        var imported: Int
+        var skipped: Int
+    }
+
+    enum ImportError: LocalizedError {
+        case unreadableFile
+        case invalidFormat
+
+        var errorDescription: String? {
+            switch self {
+            case .unreadableFile: "The file couldn't be read."
+            case .invalidFormat: "This file isn't a valid Swiftlet JSON export."
+            }
+        }
+    }
+
+    @MainActor
+    static func importJSON(_ data: Data, into context: ModelContext) throws -> ImportResult {
+        let decoder = JSONDecoder()
+        decoder.dateDecodingStrategy = .iso8601
+
+        guard let records = try? decoder.decode([Record].self, from: data) else {
+            throw ImportError.invalidFormat
+        }
+
+        let existing = (try? context.fetch(FetchDescriptor<Transaction>())) ?? []
+        var imported = 0
+        var skipped = 0
+
+        for record in records {
+            guard
+                let type = TransactionType(rawValue: record.type),
+                let source = MoneySource(rawValue: record.source),
+                let amount = Decimal(string: record.amount)
+            else {
+                skipped += 1
+                continue
+            }
+
+            let isDuplicate = existing.contains { transaction in
+                guard transaction.title == record.title else { return false }
+                guard transaction.amount == amount else { return false }
+                guard transaction.date == record.date else { return false }
+                guard transaction.type == type else { return false }
+                guard transaction.source == source else { return false }
+                return transaction.transactionDescription == record.description
+            }
+            if isDuplicate {
+                skipped += 1
+                continue
+            }
+
+            let category = resolveCategory(named: record.category, in: context)
+
+            let transaction = Transaction(
+                type: type,
+                title: record.title,
+                amount: amount,
+                source: source,
+                date: record.date,
+                description: record.description,
+                category: category
+            )
+            context.insert(transaction)
+            imported += 1
+        }
+
+        try context.save()
+        return ImportResult(imported: imported, skipped: skipped)
+    }
+
+    @MainActor
+    private static func resolveCategory(named name: String?, in context: ModelContext) -> TransactionCategory? {
+        guard let name, !name.trimmingCharacters(in: .whitespaces).isEmpty else { return nil }
+        if let match = TransactionCategory.matching(name, in: context) {
+            return match
+        }
+        let created = TransactionCategory(name: name)
+        context.insert(created)
+        return created
+    }
+
     // MARK: - CSV
 
     private static let csvHeader = ["type", "title", "amount", "source", "date", "description", "category"]
