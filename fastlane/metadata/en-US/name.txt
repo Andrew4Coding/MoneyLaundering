@@ -1,1 +1,1 @@
-TODO: App Store name (max 30 chars) — note "Money Laundering" is a review risk for a finance app; consider a compliant public name.
+Swiftlet

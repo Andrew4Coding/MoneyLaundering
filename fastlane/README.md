@@ -20,7 +20,7 @@ signing, and shipping, versioned alongside the app.
    # fill ASC_KEY_ID, ASC_ISSUER_ID, ASC_KEY_PATH in fastlane/.env
    ```
 4. Create the app record in App Store Connect once (bundle id
-   `com.andrew4coding.moneylaundering.Money-Laundering`), or run `bundle exec fastlane produce`.
+   `com.andrew4coding.swiftlet.Swiftlet`), or run `bundle exec fastlane produce`.
 
 ### Code signing
 
@@ -38,7 +38,7 @@ signing, and shipping, versioned alongside the app.
 | `bundle exec fastlane ios release` | regenerate → precheck → bump → build → upload binary + metadata. Add `submit:true` to submit for review, `force:true` to skip the metadata-preview prompt. |
 | `bundle exec fastlane ios metadata` | push `metadata/` text only — no build. Safe to run anytime. |
 | `bundle exec fastlane ios screenshots` | upload PNGs from `screenshots/<locale>/` — no build. |
-| `bundle exec fastlane ios build` | produce a signed `build/fastlane/MoneyLaundering.ipa` locally, no upload. |
+| `bundle exec fastlane ios build` | produce a signed `build/fastlane/Swiftlet.ipa` locally, no upload. |
 | `bundle exec fastlane ios bump` | set `CURRENT_PROJECT_VERSION` in `project.yml` to (latest TestFlight build + 1). |
 | `bundle exec fastlane ios register` | register app IDs and sync signing via `match`. |
 | `bundle exec fastlane ios dsyms` | download dSYMs for the current marketing version. |
@@ -61,7 +61,7 @@ Bump `MARKETING_VERSION` by hand for a new user-facing version; `bump` handles t
 - [ ] Host and verify the **privacy policy URL** and **support URL** (must not 404).
 - [ ] Add screenshots that match the shipped UI.
 - [ ] Set age rating in App Store Connect (Finance, no objectionable content).
-- [ ] Complete the App Privacy questionnaire so it matches `Money Laundering/PrivacyInfo.xcprivacy`
+- [ ] Complete the App Privacy questionnaire so it matches `Swiftlet/PrivacyInfo.xcprivacy`
       (Name — linked to identity, not tracking; nothing else collected).
 - [ ] `bundle exec fastlane ios beta` and smoke-test via TestFlight.
 - [ ] `bundle exec fastlane ios release submit:true`.

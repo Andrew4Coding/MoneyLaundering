@@ -1,7 +1,7 @@
-name: Money Laundering
+name: Swiftlet
 
 options:
-  bundleIdPrefix: com.andrew4coding.moneylaundering
+  bundleIdPrefix: com.andrew4coding.swiftlet
   createIntermediateGroups: true
   developmentLanguage: en
   deploymentTarget:
@@ -27,11 +27,11 @@ settings:
       VALIDATE_PRODUCT: YES
 
 schemes:
-  Money Laundering:
+  Swiftlet:
     build:
       targets:
-        "Money Laundering": all
-        MoneyLaunderingShareExtension: all
+        "Swiftlet": all
+        SwiftletShareExtension: all
     run:
       config: Debug
     test:
@@ -43,10 +43,10 @@ schemes:
     archive:
       config: Release
 
-  Money Laundering Share Extension:
+  Swiftlet Share Extension:
     build:
       targets:
-        MoneyLaunderingShareExtension: all
+        SwiftletShareExtension: all
     run:
       config: Debug
     test:
@@ -59,13 +59,13 @@ schemes:
       config: Release
 
 targets:
-  "Money Laundering":
+  "Swiftlet":
     type: application
     platform: iOS
     sources:
-      - path: "Money Laundering"
+      - path: "Swiftlet"
     info:
-      path: "Money Laundering/Info.plist"
+      path: "Swiftlet/Info.plist"
       properties:
         CFBundleShortVersionString: "$(MARKETING_VERSION)"
         CFBundleVersion: "$(CURRENT_PROJECT_VERSION)"
@@ -73,25 +73,25 @@ targets:
         NSAppTransportSecurity:
           NSAllowsArbitraryLoads: false
         CFBundleURLTypes:
-          - CFBundleURLName: com.andrew4coding.moneylaundering.Money-Laundering
+          - CFBundleURLName: com.andrew4coding.swiftlet.Swiftlet
             CFBundleURLSchemes:
-              - moneylaundering
+              - swiftlet
         UIBackgroundModes:
           - fetch
           - remote-notification
     entitlements:
-      path: "Money Laundering/Money Laundering.entitlements"
+      path: "Swiftlet/Swiftlet.entitlements"
       properties:
         com.apple.developer.applesignin:
           - Default
         com.apple.developer.icloud-container-identifiers:
-          - iCloud.com.andrew4coding.moneylaundering.Money-Laundering
+          - iCloud.com.andrew4coding.swiftlet.Swiftlet
         com.apple.developer.icloud-services:
           - CloudKit
         com.apple.security.application-groups:
-          - group.com.andrew4coding.moneylaundering.sharedData
+          - group.com.andrew4coding.swiftlet.sharedData
     dependencies:
-      - target: MoneyLaunderingShareExtension
+      - target: SwiftletShareExtension
         embed: true
     settings:
       base:
@@ -103,7 +103,7 @@ targets:
         DEVELOPMENT_TEAM: "92QV2QPDKA"
         ENABLE_PREVIEWS: YES
         GENERATE_INFOPLIST_FILE: YES
-        INFOPLIST_KEY_CFBundleDisplayName: "Money Laundering"
+        INFOPLIST_KEY_CFBundleDisplayName: "Swiftlet"
         INFOPLIST_KEY_LSApplicationCategoryType: "public.app-category.finance"
         INFOPLIST_KEY_NSCameraUsageDescription: "Take a photo of a bill to attach it to a transaction."
         INFOPLIST_KEY_NSPhotoLibraryUsageDescription: "Attach a photo of a bill from your library to a transaction."
@@ -113,7 +113,7 @@ targets:
         INFOPLIST_KEY_UISupportedInterfaceOrientations: "UIInterfaceOrientationPortrait"
         INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad: "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown"
         MARKETING_VERSION: "1.0"
-        PRODUCT_BUNDLE_IDENTIFIER: com.andrew4coding.moneylaundering.Money-Laundering
+        PRODUCT_BUNDLE_IDENTIFIER: com.andrew4coding.swiftlet.Swiftlet
         PRODUCT_NAME: "$(TARGET_NAME)"
         STRING_CATALOG_GENERATE_SYMBOLS: YES
         SUPPORTED_PLATFORMS: "iphoneos iphonesimulator"
@@ -126,20 +126,20 @@ targets:
         SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY: YES
         TARGETED_DEVICE_FAMILY: "1"
 
-  MoneyLaunderingShareExtension:
+  SwiftletShareExtension:
     type: app-extension
     platform: iOS
     sources:
-      - path: "MoneyLaunderingShareExtension"
+      - path: "SwiftletShareExtension"
     entitlements:
-      path: "MoneyLaunderingShareExtension/MoneyLaunderingShareExtension.entitlements"
+      path: "SwiftletShareExtension/SwiftletShareExtension.entitlements"
       properties:
         com.apple.security.application-groups:
-          - group.com.andrew4coding.moneylaundering.sharedData
+          - group.com.andrew4coding.swiftlet.sharedData
     info:
-      path: "MoneyLaunderingShareExtension/Info.plist"
+      path: "SwiftletShareExtension/Info.plist"
       properties:
-        CFBundleDisplayName: Money Laundering
+        CFBundleDisplayName: Swiftlet
         NSExtension:
           NSExtensionPointIdentifier: com.apple.share-services
           NSExtensionPrincipalClass: $(PRODUCT_MODULE_NAME).ShareViewController
@@ -153,7 +153,7 @@ targets:
         DEVELOPMENT_TEAM: "92QV2QPDKA"
         GENERATE_INFOPLIST_FILE: NO
         MARKETING_VERSION: "1.0"
-        PRODUCT_BUNDLE_IDENTIFIER: com.andrew4coding.moneylaundering.Money-Laundering.MoneyLaunderingShareExtension
+        PRODUCT_BUNDLE_IDENTIFIER: com.andrew4coding.swiftlet.Swiftlet.SwiftletShareExtension
         PRODUCT_NAME: "$(TARGET_NAME)"
         SWIFT_APPROACHABLE_CONCURRENCY: YES
         SWIFT_DEFAULT_ACTOR_ISOLATION: MainActor

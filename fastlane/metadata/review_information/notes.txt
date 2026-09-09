@@ -5,7 +5,7 @@ Feature notes:
 - Bill photo parsing and smart category suggestions use on-device Apple Intelligence and
   require an Apple Intelligence-capable device + iOS with Apple Intelligence enabled. On
   unsupported devices these features degrade gracefully (manual entry / heuristic fallback).
-- Siri: "Add a transaction in Money Laundering", "Show today's transactions in Money Laundering".
+- Siri: "Add a transaction in Swiftlet", "Show today's transactions in Swiftlet".
 - Account deletion: Account tab > Delete Account (removes all local + iCloud data and signs out).
 
 No third-party SDKs, ads, analytics, or tracking. All data stays in the user's private CloudKit database.

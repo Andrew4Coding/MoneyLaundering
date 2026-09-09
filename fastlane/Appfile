@@ -1,4 +1,4 @@
-app_identifier("com.andrew4coding.moneylaundering.Money-Laundering")
+app_identifier("com.andrew4coding.swiftlet.Swiftlet")
 apple_id(ENV["FASTLANE_APPLE_ID"] || "andrewdevitoaryo@gmail.com")
 
 itc_team_id(ENV["FASTLANE_ITC_TEAM_ID"]) if ENV["FASTLANE_ITC_TEAM_ID"]
@@ -8,8 +8,8 @@ team_id("92QV2QPDKA")
 for_platform :ios do
   for_lane :register do
     app_identifier %w[
-      com.andrew4coding.moneylaundering.Money-Laundering
-      com.andrew4coding.moneylaundering.Money-Laundering.MoneyLaunderingShareExtension
+      com.andrew4coding.swiftlet.Swiftlet
+      com.andrew4coding.swiftlet.Swiftlet.SwiftletShareExtension
     ]
   end
 end

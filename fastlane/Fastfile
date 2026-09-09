@@ -1,4 +1,4 @@
-# Money Laundering — release automation
+# Swiftlet — release automation
 #
 # Auth: App Store Connect API key (recommended). Set in fastlane/.env (gitignored):
 #   ASC_KEY_ID, ASC_ISSUER_ID, and either ASC_KEY_PATH (path to AuthKey_XXXX.p8)
@@ -17,10 +17,10 @@
 default_platform(:ios)
 
 WORKSPACE_DIR   = File.expand_path("..", __dir__)
-XCODEPROJ       = "Money Laundering.xcodeproj"
-SCHEME          = "Money Laundering"
-APP_IDENTIFIER  = "com.andrew4coding.moneylaundering.Money-Laundering"
-EXT_IDENTIFIER  = "#{APP_IDENTIFIER}.MoneyLaunderingShareExtension"
+XCODEPROJ       = "Swiftlet.xcodeproj"
+SCHEME          = "Swiftlet"
+APP_IDENTIFIER  = "com.andrew4coding.swiftlet.Swiftlet"
+EXT_IDENTIFIER  = "#{APP_IDENTIFIER}.SwiftletShareExtension"
 OUTPUT_DIR      = File.join(WORKSPACE_DIR, "build", "fastlane")
 
 platform :ios do
@@ -167,7 +167,7 @@ platform :ios do
       scheme: SCHEME,
       configuration: "Release",
       output_directory: OUTPUT_DIR,
-      output_name: "MoneyLaundering.ipa",
+      output_name: "Swiftlet.ipa",
       clean: true,
       export_method: "app-store",
       xcargs: match_configured? ? nil : "-allowProvisioningUpdates",
@@ -229,7 +229,7 @@ platform :ios do
 
   def marketing_version
     require "yaml"
-    YAML.load_file(project_yaml_path).dig("targets", "Money Laundering", "settings", "base", "MARKETING_VERSION").to_s
+    YAML.load_file(project_yaml_path).dig("targets", "Swiftlet", "settings", "base", "MARKETING_VERSION").to_s
   end
 
   def update_yaml_build_number(number)
