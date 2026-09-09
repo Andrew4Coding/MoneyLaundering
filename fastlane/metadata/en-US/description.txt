@@ -1,11 +1,11 @@
-TODO: full App Store description (max 4000 chars).
+Swiftlet is an expense tracker for everyday spending in Indonesian rupiah. It works offline and doesn't need an account.
 
-Draft outline:
-- Track every transaction in, out, and where it went.
-- Private by design: your data stays in your own iCloud (private CloudKit), never on our servers.
-- Snap a photo of a bill and it is parsed on-device.
-- Smart category suggestions powered by on-device Apple Intelligence (where supported).
-- Add transactions hands-free with Siri.
-- Works fully offline; optional Sign in with Apple only enables cross-device sync.
+You log what comes in and what goes out, each with a category, a note, and a money source. The sources are the ones you actually use: Grab, GoPay, BCA, BNI, OVO, and QRIS. Pinned categories stay one tap away, and the Home tab shows your running totals.
 
-Do not claim features that are not in the build. No financial-advice language.
+You can also type entries in plain language. Something like "lunch at Padang 25k" becomes a transaction, and shorthand amounts such as 20k, 1.5jt, 3 juta, and 20 ribu are all understood. On devices that support Apple Intelligence, this parsing happens on the device. Category suggestions are worked out on the device too. If you'd rather not open the app, Siri handles it: "Add a transaction in Swiftlet", or "Show today's transactions in Swiftlet" for a quick recap.
+
+Take a photo of a receipt and Swiftlet reads the line items on the device. Tick the ones you paid for and it splits the shared tax, service charge, and discount across them by proportion. The original photo and text stay attached.
+
+The app runs fully offline and requires no sign-in. If you do sign in with Apple, your data syncs across your devices through your own private iCloud (CloudKit). It is never stored on our servers and never used for tracking or ads. You can also import existing records from a JSON file.
+
+Swiftlet records and helps you understand your own spending. It does not give financial advice.

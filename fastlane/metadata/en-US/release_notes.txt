@@ -1,1 +1,3 @@
-Initial release.
+First release.
+
+You can track expenses and income in rupiah, tag each one with a category and a money source (Grab, GoPay, BCA, BNI, OVO, QRIS), and add entries by typing a short phrase or asking Siri. Photograph a receipt and Swiftlet reads the items so you can split the shared charges by who paid. Sign in with Apple is optional and only turns on private iCloud sync across your devices. You can import past transactions from a JSON file.

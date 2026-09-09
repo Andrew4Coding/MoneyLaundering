@@ -1,1 +1,1 @@
-TODO: publicly reachable support URL (required). Must not 404.
+https://andrew4coding.github.io/swiftlet/support

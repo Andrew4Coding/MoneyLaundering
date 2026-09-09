@@ -1,1 +1,1 @@
-TODO: comma-separated keywords, max 100 chars total, no spaces after commas, no competitor names
+expense,budget,money,finance,spending,receipt,bill split,tracker,rupiah,wallet,offline,siri

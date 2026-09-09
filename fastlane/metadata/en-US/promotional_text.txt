@@ -1,1 +1,1 @@
-TODO: promotional text (max 170 chars) — editable any time without a new build
+Log expenses and income in rupiah, scan a receipt, or split a bill by who paid. Everything stays in your own iCloud, not on our servers.
