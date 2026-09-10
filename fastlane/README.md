@@ -23,6 +23,14 @@ For _fastlane_ installation instructions, see [Installing _fastlane_](https://do
 
 Build + upload a build to TestFlight
 
+### ios beta_external
+
+```sh
+[bundle exec] fastlane ios beta_external
+```
+
+Build + upload + submit to Beta App Review for external testing (public link)
+
 ### ios release
 
 ```sh
