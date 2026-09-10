@@ -169,7 +169,6 @@ targets:
       - path: "SwiftletWidgets"
       - path: "Swiftlet/Shared/TodaySpendingSnapshot.swift"
       - path: "Swiftlet/Services/CurrencyFormatter.swift"
-      - path: "Swiftlet/Services/Bill/BillMath.swift"
     entitlements:
       path: "SwiftletWidgets/SwiftletWidgets.entitlements"
       properties:
