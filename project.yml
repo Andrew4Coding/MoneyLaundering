@@ -32,6 +32,7 @@ schemes:
       targets:
         "Swiftlet": all
         SwiftletShareExtension: all
+        SwiftletWidgets: all
     run:
       config: Debug
     test:
@@ -92,6 +93,8 @@ targets:
           - group.com.andrew4coding.swiftlet.sharedData
     dependencies:
       - target: SwiftletShareExtension
+        embed: true
+      - target: SwiftletWidgets
         embed: true
     settings:
       base:
@@ -157,4 +160,37 @@ targets:
         PRODUCT_NAME: "$(TARGET_NAME)"
         SWIFT_APPROACHABLE_CONCURRENCY: YES
         SWIFT_DEFAULT_ACTOR_ISOLATION: MainActor
+        TARGETED_DEVICE_FAMILY: "1,2"
+
+  SwiftletWidgets:
+    type: app-extension
+    platform: iOS
+    sources:
+      - path: "SwiftletWidgets"
+      - path: "Swiftlet/Shared/TodaySpendingSnapshot.swift"
+      - path: "Swiftlet/Services/CurrencyFormatter.swift"
+      - path: "Swiftlet/Services/Bill/BillMath.swift"
+    entitlements:
+      path: "SwiftletWidgets/SwiftletWidgets.entitlements"
+      properties:
+        com.apple.security.application-groups:
+          - group.com.andrew4coding.swiftlet.sharedData
+    info:
+      path: "SwiftletWidgets/Info.plist"
+      properties:
+        CFBundleDisplayName: Swiftlet
+        NSExtension:
+          NSExtensionPointIdentifier: com.apple.widgetkit-extension
+    settings:
+      base:
+        CODE_SIGN_STYLE: Automatic
+        CURRENT_PROJECT_VERSION: 1
+        DEVELOPMENT_TEAM: "92QV2QPDKA"
+        GENERATE_INFOPLIST_FILE: NO
+        MARKETING_VERSION: "1.0"
+        PRODUCT_BUNDLE_IDENTIFIER: com.andrew4coding.swiftlet.Swiftlet.SwiftletWidgets
+        PRODUCT_NAME: "$(TARGET_NAME)"
+        SWIFT_APPROACHABLE_CONCURRENCY: YES
+        SWIFT_DEFAULT_ACTOR_ISOLATION: MainActor
+        SWIFT_EMIT_LOC_STRINGS: YES
         TARGETED_DEVICE_FAMILY: "1,2"

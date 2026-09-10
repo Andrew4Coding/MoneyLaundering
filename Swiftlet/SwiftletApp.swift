@@ -10,6 +10,8 @@ import SwiftUI
 
 @main
 struct SwiftletApp: App {
+    @Environment(\.scenePhase) private var scenePhase
+
     @State private var authService = AuthenticationService()
     @State private var pendingReceiptImageData: Data?
 
@@ -33,6 +35,12 @@ struct SwiftletApp: App {
             }
             .task {
                 consumePendingReceipt()
+                TodaySpendingSnapshotWriter.rebuild(using: container.mainContext)
+            }
+            .onChange(of: scenePhase) { _, phase in
+                if phase != .active {
+                    TodaySpendingSnapshotWriter.rebuild(using: container.mainContext)
+                }
             }
         }
         .modelContainer(container)
