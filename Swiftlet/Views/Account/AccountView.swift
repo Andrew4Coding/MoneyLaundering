@@ -120,7 +120,7 @@ struct AccountView: View {
         } header: {
             Text("Data")
         } footer: {
-            Text("Reset clears every transaction, bill, and custom category on this device but keeps you signed in and restores the default categories. \(deleteFooterText)")
+            Text("Reset clears every transaction and custom category on this device but keeps you signed in and restores the default categories. \(deleteFooterText)")
         }
         .confirmationDialog(
             "Reset all data?",
@@ -132,7 +132,7 @@ struct AccountView: View {
             }
             Button("Cancel", role: .cancel) {}
         } message: {
-            Text("This permanently deletes every transaction, bill, and custom category\(syncScopeSuffix). Default categories are restored. This can't be undone.")
+            Text("This permanently deletes every transaction and custom category\(syncScopeSuffix). Default categories are restored. This can't be undone.")
         }
         .confirmationDialog(
             deleteDialogTitle,

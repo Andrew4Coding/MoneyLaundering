@@ -51,5 +51,5 @@ struct RootTabView: View {
 
 #Preview {
     RootTabView(pendingReceiptImageData: .constant(nil))
-        .modelContainer(for: [Transaction.self, TransactionCategory.self, Bill.self, BillItem.self], inMemory: true)
+        .modelContainer(for: [Transaction.self, TransactionCategory.self], inMemory: true)
 }

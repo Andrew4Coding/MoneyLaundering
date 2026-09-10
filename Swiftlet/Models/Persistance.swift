@@ -13,8 +13,6 @@ enum Persistance {
         let schema = Schema([
             Transaction.self,
             TransactionCategory.self,
-            Bill.self,
-            BillItem.self,
         ])
 
         let config = ModelConfiguration(
